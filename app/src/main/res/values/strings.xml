@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">TMI</string>
     <string name="str_done">지정 완료</string>
+    <string name="e_mail">E-mail</string>
+    <string name="str_authorize">인증</string>
+    <string name="str_passwd">Password</string>
+    <string name="str_register">회원가입</string>
 </resources>

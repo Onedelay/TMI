@@ -17,6 +17,8 @@ import com.inu.tmi.R;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final int REQUEST_LOGIN = 100;
+
     EditText ID;
     EditText PW;
     Button LoginBTN;
@@ -29,8 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         ID = (EditText)findViewById(R.id.IDtxt);
         PW = (EditText)findViewById(R.id.PWtxt);
 
-        LoginBTN = (Button)findViewById(R.id.loginbtn);
-        LoginBTN.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.loginbtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(ID.getText().equals(null) )
@@ -52,5 +53,20 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        findViewById(R.id.registerBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivityForResult(intent, REQUEST_LOGIN);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 회원가입 성공 시 데이터 바로 입력해서 로그인 고!
     }
 }

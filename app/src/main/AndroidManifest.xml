@@ -22,12 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.guest.Guest_ParticipaintingActivity"/>
-        <activity android:name=".activity.host.Host_MakingActivity"/>
-        <activity android:name=".activity.host.Host_WritingActivity"/>
-        <activity android:name=".activity.host.Host_SuccessActivity"/>
-
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.guest.Guest_ParticipaintingActivity" />
+        <activity android:name=".activity.host.Host_MakingActivity" />
+        <activity android:name=".activity.host.Host_WritingActivity" />
+        <activity android:name=".activity.host.Host_SuccessActivity" />
+        <activity android:name=".activity.RegisterActivity"></activity>
     </application>
 
 </manifest>
