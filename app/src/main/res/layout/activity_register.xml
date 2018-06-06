@@ -10,6 +10,8 @@
         android:id="@+id/form"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/registerBtn">
         <TableRow>
@@ -23,12 +25,13 @@
 
             <EditText
                 android:id="@+id/inputEmail"
-                android:layout_width="200dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"/>
 
             <Button
                 android:id="@+id/authorBtn"
+                android:layout_width="50dp"
                 android:text="@string/str_authorize"/>
         </TableRow>
 
@@ -43,7 +46,7 @@
 
             <EditText
                 android:id="@+id/inputPasswd"
-                android:layout_width="200dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"/>
         </TableRow>
