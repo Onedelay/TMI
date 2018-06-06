@@ -22,7 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.RecruitActivity"/>
         <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.guest.Guest_ParticipaintingActivity"/>
         <activity android:name=".activity.host.Host_MakingActivity"/>
