@@ -22,6 +22,15 @@
             android:background="@android:color/holo_orange_dark"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme">
+
+            <ImageButton
+                android:id="@+id/Back"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:background="@null"
+                app:srcCompat="@drawable/back" />
+
             <TextView
                 android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
@@ -32,19 +41,24 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <Button
-            android:id="@+id/host"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tablayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="탈사람!" />
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <Button
-            android:id="@+id/guest"
+            android:id="@+id/GTOS"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="탈래요!" />
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="탑 승 완 료" />
 
 
     </LinearLayout>
