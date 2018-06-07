@@ -19,8 +19,10 @@ import android.widget.Toast;
 import com.inu.tmi.R;
 import com.inu.tmi.activity.guest.Guest_ParticipaintingActivity;
 import com.inu.tmi.activity.host.Host_MakingActivity;
+import com.inu.tmi.handler.BackPressCloseHandler;
 
 public class MainActivity extends AppCompatActivity {
+    private BackPressCloseHandler backPressCloseHandler;
 
     private Toolbar toolbar;
     TextView toolbar_title;
@@ -29,10 +31,16 @@ public class MainActivity extends AppCompatActivity {
     Button Guest;
 
     @Override
+    public void onBackPressed() {
+        backPressCloseHandler.onBackPressed();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         //상단 바 지정
         toolbar = (Toolbar)findViewById(R.id.toolbar);

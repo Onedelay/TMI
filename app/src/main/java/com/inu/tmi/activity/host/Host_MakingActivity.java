@@ -125,20 +125,19 @@ public class Host_MakingActivity extends AppCompatActivity{
             }
         });
 
-        final Host_TabFragment1 host_tabFragment1 = new Host_TabFragment1();
-        host_tabFragment1.setArguments(new Bundle());
+        final Host_TabFragment host_tabFragment = new Host_TabFragment();
+        host_tabFragment.setArguments(new Bundle());
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.map,host_tabFragment1);
+        fragmentTransaction.add(R.id.map,host_tabFragment);
         fragmentTransaction.commit();
 
         findViewById(R.id.myLocationButton).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                host_tabFragment1.MarkMyLocation();
+                host_tabFragment.MarkMyLocation();
             }
         });
-
 
     }
 }

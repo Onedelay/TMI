@@ -16,6 +16,7 @@ import com.nhn.android.maps.maplib.NGeoPoint;
 import com.nhn.android.maps.nmapmodel.NMapError;
 import com.nhn.android.maps.nmapmodel.NMapPlacemark;
 import com.nhn.android.maps.overlay.NMapPOIdata;
+import com.nhn.android.maps.overlay.NMapPOIitem;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 
@@ -76,7 +77,6 @@ public class NMapFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mMapContext = new NMapContext(super.getActivity());
-
         mMapContext.onCreate();
     }
 
@@ -140,7 +140,9 @@ public class NMapFragment extends Fragment {
     private final NMapActivity.OnDataProviderListener onDataProviderListener = new NMapActivity.OnDataProviderListener() {
         @Override
         public void onReverseGeocoderResponse(NMapPlacemark placeMark, NMapError errInfo) {
-            address = placeMark.toString();
+            if(placeMark != null) {
+                address = placeMark.toString();
+            }
             if (DEBUG) {
                 Log.i(LOG_TAG, "onReverseGeocoderResponse: placeMark="
                         + ((placeMark != null) ? placeMark.toString() : null));
@@ -152,6 +154,28 @@ public class NMapFragment extends Fragment {
             }
         }
 
+    };
+
+    // 마커 클릭 시 호출되는 리스너
+    private final NMapPOIdataOverlay.OnStateChangeListener onPOIdataStateChangeListener = new NMapPOIdataOverlay.OnStateChangeListener() {
+        @Override
+        public void onCalloutClick(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
+            mMapContext.findPlacemarkAtLocation(item.getPoint().longitude, item.getPoint().latitude);
+            if (DEBUG) {
+                Log.i(LOG_TAG, "onCalloutClick: title=" + item.getTitle());
+            }
+        }
+
+        @Override
+        public void onFocusChanged(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
+            if (DEBUG) {
+                if (item != null) {
+                    Log.i(LOG_TAG, "onFocusChanged: " + item.toString());
+                } else {
+                    Log.i(LOG_TAG, "onFocusChanged: ");
+                }
+            }
+        }
     };
 
     public void MarkMyLocation() {
@@ -171,6 +195,7 @@ public class NMapFragment extends Fragment {
 
         // create POI data overlay
         poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
+        poiDataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
         poiDataOverlay.setHidden(false);
 
         // show all POI data
