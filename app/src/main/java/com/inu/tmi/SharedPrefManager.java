@@ -357,6 +357,17 @@ public class SharedPrefManager {
 
   }
 
+  public static void UserLogout(Context context)
+  {
+    preferencesRemove(context,"name");
+    preferencesRemove(context,"email");
+    preferencesRemove(context,"image");
+    preferencesRemove(context,"id");
+    preferencesRemove(context,"pass");
+    preferencesRemove(context,"name");
+    preferencesRemove(context,"AutoLogin");
+
+  }
   public static final String Location="outside" ;//처음 장소는 밖에
   public static final String Time = "0";          //처음 시간은 0으로 초기화
 
@@ -366,13 +377,4 @@ public class SharedPrefManager {
     preferencesRemove(context,"AudioMode");
   }
 
-  //TODO 삭제해야함
-  public static void UserLogout(Context context){
-    preferencesRemove(context,"LobbyEnter");
-    preferencesRemove(context,"LOBBY_TIME");
-    preferencesRemove(context,"BEACON");
-    preferencesRemove(context,"CINEMA");
-    preferencesRemove(context,"TIMER");
-    preferencesRemove(context,"Dialog");
-  }
 }

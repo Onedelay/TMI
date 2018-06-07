@@ -1,6 +1,9 @@
 package com.inu.tmi.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -9,20 +12,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.inu.tmi.R;
+import com.inu.tmi.SharedPrefManager;
 import com.inu.tmi.activity.guest.Guest_ParticipaintingActivity;
-
-import com.inu.tmi.activity.host.Host_MakingActivity;
+import com.inu.tmi.activity.host.Host_WritingActivity;
 import com.inu.tmi.handler.BackPressCloseHandler;
 
-import com.inu.tmi.activity.host.Host_WritingActivity;
+import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -94,11 +99,29 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.logout:
                         Toast.makeText(getApplicationContext(),"로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
+                        SharedPrefManager.UserLogout(getApplicationContext());
+                        Intent it = new Intent(MainActivity.this,LoginActivity.class);
+                        startActivity(it);
+                        finish();
                         break;
                 }
                 return true;
             }
         });
+
+
+        //Drawer header view 속성 지정
+        View hView = navigationView.getHeaderView(0);
+//        image가 null인지 아닌지 확인한 후
+//        등록한 이미지가 있을 경우 , 회원 이름, 회원 이메일 정보 sharedpreference에 저장되어있으면
+        new DownloadImageTask((ImageView)hView.findViewById(R.id.userimage)).execute(SharedPrefManager.preferencesLoadString(this, "image"));
+        TextView username = (TextView)hView.findViewById(R.id.username);
+        username.setText(SharedPrefManager.preferencesLoadString(this, "name"));
+        TextView useremail = (TextView)hView.findViewById(R.id.useremail);
+        useremail.setText(SharedPrefManager.preferencesLoadString(this, "email"));
+
+
+
 
 
         //탈사람 눌렀을 때
@@ -122,6 +145,32 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    //이미지 둥글게 함수
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("CURRNET Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+
     }
 
 }
