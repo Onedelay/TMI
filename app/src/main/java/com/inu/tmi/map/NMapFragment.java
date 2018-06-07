@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapContext;
@@ -160,6 +158,10 @@ public class NMapFragment extends Fragment {
         return selectPoint;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     private final NMapLocationManager.OnLocationChangeListener onMyLocationChangeListener = new NMapLocationManager.OnLocationChangeListener() {
         @Override
         public boolean onLocationChanged(NMapLocationManager nMapLocationManager, NGeoPoint nGeoPoint) {
@@ -283,6 +285,11 @@ public class NMapFragment extends Fragment {
 
         // show all POI data
         poiDataOverlay.showAllPOIdata(0);
+    }
+
+    public String MarkLocation()
+    {
+        return address.toString();
     }
 
     @Override
