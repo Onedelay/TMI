@@ -53,6 +53,14 @@ public class ListViewAdapter extends BaseAdapter{
         final TextView to = (TextView)view.findViewById(R.id.to);
         final TextView distance = (TextView)view.findViewById(R.id.distance);
 
+
+        final ListViewItem list = listViewItems.get(i);
+
+        userIcon.setImageDrawable(list.getUserIcon());
+        from.setText(list.getFrom());
+        to.setText(list.getTo());
+        distance.setText(list.getDst());
+
         return view;
     }
 
