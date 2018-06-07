@@ -9,8 +9,24 @@ import android.graphics.drawable.Drawable;
 public class ListViewItem {
     private Drawable UserIcon;
     private String From;
+    private Double start_long;
+    private Double start_lati;
     private String To;
+    private Double end_long;
+    private Double end_lati;
     private String Dst;
+
+    public void setEnd_long(Double end_long) {
+        this.end_long = end_long;
+    }
+
+    public Double getEnd_lati() {
+        return end_lati;
+    }
+
+    public void setEnd_lati(Double end_lati) {
+        this.end_lati = end_lati;
+    }
 
     public Drawable getUserIcon() {
         return UserIcon;
@@ -42,5 +58,25 @@ public class ListViewItem {
 
     public void setDst(String dst) {
         Dst = dst;
+    }
+
+    public Double getStart_long() {
+        return start_long;
+    }
+
+    public void setStart_long(Double start_long) {
+        this.start_long = start_long;
+    }
+
+    public Double getStart_lati() {
+        return start_lati;
+    }
+
+    public void setStart_lati(Double start_lati) {
+        this.start_lati = start_lati;
+    }
+
+    public Double getEnd_long() {
+        return end_long;
     }
 }
