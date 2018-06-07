@@ -46,7 +46,8 @@ public class NMapFragment extends Fragment {
     private double longitude;
     private String address;
 
-    private NGeoPoint initPoint;
+    private NGeoPoint point;
+    private NGeoPoint selectPoint;
 
     /**
      * Fragment에 포함된 NMapView 객체를 반환함
@@ -151,11 +152,21 @@ public class NMapFragment extends Fragment {
         mMapController = mapView.getMapController();
     }
 
+    public NGeoPoint getPoint() {
+        return point;
+    }
+
+    public NGeoPoint getSelectPoint() {
+        return selectPoint;
+    }
+
     private final NMapLocationManager.OnLocationChangeListener onMyLocationChangeListener = new NMapLocationManager.OnLocationChangeListener() {
         @Override
         public boolean onLocationChanged(NMapLocationManager nMapLocationManager, NGeoPoint nGeoPoint) {
             latitude = nGeoPoint.getLatitude();
             longitude = nGeoPoint.getLongitude();
+
+            point = nGeoPoint;
 
             return true;
         }
@@ -174,7 +185,7 @@ public class NMapFragment extends Fragment {
     private final NMapActivity.OnDataProviderListener onDataProviderListener = new NMapActivity.OnDataProviderListener() {
         @Override
         public void onReverseGeocoderResponse(NMapPlacemark placeMark, NMapError errInfo) {
-            if (address != null) {
+            if (placeMark != null) {
                 address = placeMark.toString();
             }
             if (DEBUG) {
@@ -237,6 +248,7 @@ public class NMapFragment extends Fragment {
 
         if (poiDataOverlay != null && !poiDataOverlay.isHidden()) {
             poiDataOverlay.setHidden(true);
+            poiDataOverlay.removeAllPOIdata();
         }
 
         // set POI data
@@ -248,12 +260,14 @@ public class NMapFragment extends Fragment {
         NMapPOIitem item = poiData.getPOIitem(0);
 
         if(item != null){
-            item.setPoint(mMapController.getMapCenter());
+            //item.setPoint(mMapController.getMapCenter());
+            item.setPoint(point);
+
             // set floating mode
             item.setFloatingMode(NMapPOIitem.FLOATING_TOUCH | NMapPOIitem.FLOATING_DRAG);
             // show right button on callout
-            item.setRightButton(true);
             mFloatingPOIitem = item;
+            selectPoint = mFloatingPOIitem.getPoint();
         }
 
         // create POI data overlay
@@ -263,9 +277,7 @@ public class NMapFragment extends Fragment {
 
             // set event listener to the overlay
             poiDataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
-
             poiDataOverlay.selectPOIitem(0, false);
-
             mFloatingPOIdataOverlay = poiDataOverlay;
         }
 
