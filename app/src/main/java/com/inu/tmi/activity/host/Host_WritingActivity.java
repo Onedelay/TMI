@@ -10,80 +10,61 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.inu.tmi.R;
+import com.inu.tmi.SharedPrefManager;
 import com.inu.tmi.activity.MainActivity;
+import com.inu.tmi.api.RoomBody;
+import com.inu.tmi.api.TMIServer;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by bmj on 2018-06-05.
  */
 
-public class Host_WritingActivity extends AppCompatActivity  {
+public class Host_WritingActivity extends AppCompatActivity {
+    private static final String TAG = "TMI.TMI_HOST_Writing";
+
+    private String startlat;
+    private String startlong;
+    private String lastlat;
+    private String lastlong;
+    private String startname;
+    private String lastname;
 
     private Toolbar toolbar;
     TextView toolbar_title;
     DrawerLayout drawerLayout;
 
-    EditText pregps; //현재 위치
-    EditText dstgps; //목적지
+    TextView pregps; //현재 위치
+    TextView dstgps; //목적지
     Button WtoS;
     ImageButton BACKbtn;
 
     Spinner spinner;
+    Spinner commentspinner;
     ImageButton GPS;
-    String DST="";
-
-//    @Override
-//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-//        super.onSaveInstanceState(outState, outPersistentState);
-//        DST = spinner.getSelectedItem().toString();
-//        outState.putString("Selected",DST);
-//    }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//    }
+    String DST = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.host_writing);
 
-//        if(savedInstanceState != null)
-//        {
-//            String prespinner = savedInstanceState.getString("Selected");
-//            switch (prespinner)
-//            {
-//                case "인천대 정문":
-//                    spinner.setSelection(0);
-//                    break;
-//                case "인천대 자연대":
-//                    spinner.setSelection(1);
-//                    break;
-//                case "인천대 공대":
-//                    spinner.setSelection(2);
-//                    break;
-//                case "인천대 기숙사":
-//                    spinner.setSelection(3);
-//                    break;
-//                case "인천대 미추홀":
-//                    spinner.setSelection(4);
-//                    break;
-//
-//            }
-//        }
         //상단 바 지정
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -109,8 +90,8 @@ public class Host_WritingActivity extends AppCompatActivity  {
             }
         });
 
-        BACKbtn = (ImageButton)findViewById(R.id.Back);
-        BACKbtn.setOnClickListener(new View.OnClickListener(){
+        BACKbtn = (ImageButton) findViewById(R.id.Back);
+        BACKbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Host_WritingActivity.this, MainActivity.class);
@@ -148,9 +129,25 @@ public class Host_WritingActivity extends AppCompatActivity  {
         });
 
 
+        pregps = (TextView) findViewById(R.id.pregps);
+
+        Intent intent = getIntent();
+        if (intent != null || !intent.getStringExtra("From").equals("")) {
+            pregps.setText(intent.getStringExtra("From"));
+            startlat = intent.getStringExtra("startlat");
+            startlong = intent.getStringExtra("startlong");
+            lastlat = intent.getStringExtra("lastlat");
+            lastlong = intent.getStringExtra("lastlong");
+            startname = intent.getStringExtra("startname");
+            lastname = intent.getStringExtra("lastname");
+            if( startname == null) startname = "명주바보";
+            if( lastname == null) lastname = "지연바보";
+
+        }
+
         //Spinner 부분
-        spinner = (Spinner)findViewById(R.id.dstspinner);
-        ArrayAdapter<CharSequence> splinner_adapter = ArrayAdapter.createFromResource(this,R.array.dst_arrays,android.R.layout.simple_spinner_item);
+        spinner = (Spinner) findViewById(R.id.dstspinner);
+        final ArrayAdapter<CharSequence> splinner_adapter = ArrayAdapter.createFromResource(this, R.array.dst_arrays, android.R.layout.simple_spinner_item);
         splinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(splinner_adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -165,36 +162,71 @@ public class Host_WritingActivity extends AppCompatActivity  {
             }
         });
 
+        //Spinner 부분
+        commentspinner = (Spinner) findViewById(R.id.commentspinner);
+        final ArrayAdapter<CharSequence> splinner_adapter1 = ArrayAdapter.createFromResource(this, R.array.comment_arrays, android.R.layout.simple_spinner_item);
+        splinner_adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        commentspinner.setAdapter(splinner_adapter1);
+        commentspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                commentspinner.setPrompt(getResources().getString(R.string.spinner_title));
+            }
+        });
+
 
         //GPS 버튼 클릭 시 위치 구하러
-        GPS = (ImageButton)findViewById(R.id.gps);
-        GPS.setOnClickListener(new View.OnClickListener(){
+        GPS = (ImageButton) findViewById(R.id.gps);
+        GPS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Host_WritingActivity.this,Host_MakingActivity.class);
+                Intent intent = new Intent(Host_WritingActivity.this, Host_MakingActivity.class);
                 startActivity(intent);
-                //finish();
+                finish();
             }
         });
 
         //TMI 생성하는 부분
-        WtoS = (Button)findViewById(R.id.WTOS);
-        WtoS.setOnClickListener(new View.OnClickListener(){
+        WtoS = (Button) findViewById(R.id.WTOS);
+        WtoS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(pregps.getText().equals(null) )
-                {
-                    Toast.makeText(getApplicationContext(),"현재 위치 입력해라", Toast.LENGTH_SHORT).show();
+                if (pregps.getText().equals("")) {
+                    Toast.makeText(getApplicationContext(), "현재 위치 입력해라", Toast.LENGTH_SHORT).show();
                 }
-                else if(dstgps.getText().equals(null))
-                {
-                    Toast.makeText(getApplicationContext(),"목적지 입력해라", Toast.LENGTH_SHORT).show();
+                if (spinner.getSelectedItem().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "목적지 입력해라", Toast.LENGTH_SHORT).show();
                 }
-                else
-                {
+                if (!pregps.getText().equals("") && !spinner.getSelectedItem().toString().equals("")) {
                     //TODO
+
+                    String user_token = SharedPrefManager.preferencesLoadString(getApplicationContext(),"token");
+                    TMIServer.getInstance().createRoom(user_token,startlat,startlong,lastlat,lastlong,commentspinner.getSelectedItem().toString(),startname,spinner.getSelectedItem().toString(), new Callback<RoomBody>() {
+
+                        @Override
+                        public void onResponse(Call<RoomBody> call, Response<RoomBody> response) {
+                            if (response.body() != null) {
+                                Log.i(TAG, "응답");
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<RoomBody> call, Throwable t) {
+                            Log.i(TAG, "실패");
+                            Log.i(TAG, t.toString());
+
+                        }
+                    });
+
+
                     //db 저장 후 Taxi Mate 만들기
-                    Intent intent = new Intent(Host_WritingActivity.this,Host_SuccessActivity.class);
+                    Intent intent = new Intent(Host_WritingActivity.this, Host_SuccessActivity.class);
                     intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();

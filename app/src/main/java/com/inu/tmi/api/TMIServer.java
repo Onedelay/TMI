@@ -4,8 +4,6 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.inu.tmi.activity.RegisterActivity;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -13,9 +11,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
-import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -71,6 +67,11 @@ public class TMIServer extends Application{
     public void emailCheck(@NonNull String email, Callback<ServerRequestBody> callback) {
         Log.i(TAG,"TMIServer emailCheck");
         tmiService.emailCheck(email).enqueue(callback);
+    }
+
+    public void createRoom(@NonNull String user_token, @NonNull String start_lat, @NonNull String start_long, @NonNull String last_lat, @NonNull String last_long, @NonNull String taxi_msg, @NonNull String start_name, @NonNull String last_name, Callback<RoomBody> callback) {
+        Log.i(TAG,"TMIServer emailCheck");
+        tmiService.createRoom(user_token, start_lat,start_long,last_lat,last_long,taxi_msg,start_name,last_name).enqueue(callback);
     }
 
 }
