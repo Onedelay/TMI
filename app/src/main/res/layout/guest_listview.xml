@@ -15,12 +15,13 @@
 
     <TextView
         android:id="@+id/from"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="출발지"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@id/distance"
+        app:layout_constraintStart_toEndOf="@id/stateDepart"
+        app:layout_constraintEnd_toEndOf="@id/distance"
         app:layout_constraintBottom_toBottomOf="@+id/stateDepart"
         app:layout_constraintTop_toTopOf="@+id/stateDepart" />
 
@@ -30,8 +31,8 @@
         android:layout_height="20dp"
         android:layout_margin="5dp"
         android:src="@drawable/img_allow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/from"
+        app:layout_constraintStart_toStartOf="@id/from"
         app:layout_constraintTop_toBottomOf="@+id/from" />
 
     <ImageView
@@ -43,13 +44,13 @@
 
     <TextView
         android:id="@+id/to"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="목적지"
         android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/from"
         app:layout_constraintEnd_toEndOf="@id/from"
-        app:layout_constraintStart_toEndOf="@id/stateArrive"
         app:layout_constraintTop_toTopOf="@id/stateArrive" />
 
     <TextView
