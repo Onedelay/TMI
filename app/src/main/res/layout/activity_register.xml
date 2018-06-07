@@ -48,7 +48,23 @@
                 android:id="@+id/inputPasswd"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textPassword"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/str_name"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/inputName"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:inputType="text"/>
         </TableRow>
     </TableLayout>
 
