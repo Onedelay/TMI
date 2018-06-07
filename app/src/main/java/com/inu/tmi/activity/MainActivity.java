@@ -18,8 +18,12 @@ import android.widget.Toast;
 
 import com.inu.tmi.R;
 import com.inu.tmi.activity.guest.Guest_ParticipaintingActivity;
+
 import com.inu.tmi.activity.host.Host_MakingActivity;
 import com.inu.tmi.handler.BackPressCloseHandler;
+
+import com.inu.tmi.activity.host.Host_WritingActivity;
+
 
 public class MainActivity extends AppCompatActivity {
     private BackPressCloseHandler backPressCloseHandler;
@@ -102,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         Host.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent(MainActivity.this, Host_MakingActivity.class);
+                Intent intent =new Intent(MainActivity.this, Host_WritingActivity.class);
                 startActivity(intent);
                 finish();
             }

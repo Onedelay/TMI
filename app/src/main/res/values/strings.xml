@@ -5,4 +5,13 @@
     <string name="str_authorize">인증</string>
     <string name="str_passwd">암호</string>
     <string name="str_register">회원가입</string>
+
+    <string name="spinner_title">목적지를 선택</string>
+    <string-array name="dst_arrays">
+        <item>인천대 정문</item>
+        <item>인천대 자연대</item>
+        <item>인천대 공대</item>
+        <item>인천대 기숙사</item>
+        <item>인천대 미추홀</item>
+    </string-array>
 </resources>

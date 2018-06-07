@@ -19,13 +19,12 @@ import android.widget.Toast;
 import com.inu.tmi.R;
 import com.inu.tmi.SharedPrefManager;
 import com.inu.tmi.api.LoginBody;
-import com.inu.tmi.api.RequestBody;
 import com.inu.tmi.api.TMIServer;
-import com.inu.tmi.api.TMIService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 /**
  * Created by bmj on 2018-06-05.
