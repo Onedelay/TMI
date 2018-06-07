@@ -6,9 +6,13 @@ import android.util.Log;
 
 import com.inu.tmi.activity.RegisterActivity;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,15 +56,19 @@ public class TMIServer extends Application{
     }
 
 
-    public void signUp(@NonNull String email, @NonNull String pwd, Callback<RequestBody> callback) {
-       tmiService.signUp(email,pwd).enqueue(callback);
+    public void signUp(@NonNull String email, @NonNull String pwd, @NonNull String name, @NonNull File user_img, Callback<ServerRequestBody> callback) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), user_img);
+        MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("userfile", user_img.getName(), requestBody);
+
+        tmiService.signUp(multipartBody).enqueue(callback);
     }
+
 
     public void login(@NonNull String email, @NonNull String pwd, Callback<LoginBody> callback) {
         tmiService.login(email,pwd).enqueue(callback);
     }
 
-    public void emailCheck(@NonNull String email, Callback<RequestBody> callback) {
+    public void emailCheck(@NonNull String email, Callback<ServerRequestBody> callback) {
         Log.i(TAG,"TMIServer emailCheck");
         tmiService.emailCheck(email).enqueue(callback);
     }
