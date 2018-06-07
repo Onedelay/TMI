@@ -15,4 +15,12 @@
         <item>인천대 기숙사</item>
         <item>인천대 미추홀</item>
     </string-array>
+
+    <string-array name="comment_arrays">
+        <item>직접 입력</item>
+        <item>지각입니다 ㅠ.ㅜ</item>
+        <item>저랑 같이 탑승하실래요?</item>
+        <item>자네도 혹시 지각인가?</item>
+    </string-array>
+
 </resources>

@@ -1,5 +1,6 @@
 package com.inu.tmi.activity.guest;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -55,5 +56,19 @@ public class Guest_TabFragment2 extends Fragment {
 
         //for(bocy 사이즈 만큼)
         //
+    }
+    public double GetDistance(double latitude_a , double longtitude_a, double latitude_b, double longtitude_b)
+    {
+        Location start = new Location("A");
+        Location end = new Location("B");
+
+        start.setLatitude(latitude_a);
+        start.setLongitude(longtitude_a);
+        end.setLatitude(latitude_b);
+        end.setLongitude(longtitude_b);
+
+        double distance = start.distanceTo(end);
+
+        return distance;
     }
 }
