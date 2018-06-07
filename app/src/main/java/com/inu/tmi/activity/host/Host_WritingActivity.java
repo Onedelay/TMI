@@ -212,6 +212,11 @@ public class Host_WritingActivity extends AppCompatActivity {
                         public void onResponse(Call<RoomBody> call, Response<RoomBody> response) {
                             if (response.body() != null) {
                                 Log.i(TAG, "응답");
+                                //db 저장 후 Taxi Mate 만들기
+                                Intent intent = new Intent(Host_WritingActivity.this, Host_SuccessActivity.class);
+                                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
 
                             }
                         }
@@ -225,11 +230,7 @@ public class Host_WritingActivity extends AppCompatActivity {
                     });
 
 
-                    //db 저장 후 Taxi Mate 만들기
-                    Intent intent = new Intent(Host_WritingActivity.this, Host_SuccessActivity.class);
-                    intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
+
                 }
             }
         });

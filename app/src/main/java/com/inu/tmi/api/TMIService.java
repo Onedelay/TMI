@@ -29,6 +29,7 @@ public interface TMIService {
     @POST("user/signup/email")
     Call<ServerRequestBody> emailCheck(@Field("email") String email);
 
+    //방생성
     @FormUrlEncoded
     @POST("taxi/taxiAllList")
     Call<GuestListBody> listCall(@Field("my_lat") double mylat, @Field("my_long") double mylong);
@@ -38,5 +39,25 @@ public interface TMIService {
                               @Field("last_lat") String last_lat, @Field("last_long") String last_long,
                               @Field("taxi_msg") String taxi_msg, @Field("start_name")String start_name,
                               @Field("last_name")String end_name);
+
+    //방삭제
+    @FormUrlEncoded
+    @POST("taxi/roomDel")
+    Call<ServerRequestBody> roomDel(@Field("room_id") int room_id);
+
+    //탑승자 추가
+    @FormUrlEncoded
+    @POST("taxi/addMem")
+    Call<ServerRequestBody> addMem(@Header("user_token")String user_token, @Field("room_id") int room_id);
+
+    //학교인증
+    @FormUrlEncoded
+    @POST("user/mail/send")
+    Call<ServerRequestBody> mailSend( @Field("email") String email);
+
+    //방삭제
+    @FormUrlEncoded
+    @POST("taxi/taxiList")
+    Call<taxiAllListBody> taxiList(@Header("user_token") String user_token);
 
 }
