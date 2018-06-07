@@ -142,11 +142,11 @@
         <Button
             android:id="@+id/WTOS"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_gravity="bottom"
             android:layout_weight="0.5"
             android:gravity="bottom|center"
-            android:text="지정 완료" />
+            android:background="@drawable/btn_collect"/>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
