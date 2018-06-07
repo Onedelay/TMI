@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -73,6 +74,11 @@ public class TMIServer extends Application{
     public void createRoom(@NonNull String user_token, @NonNull String start_lat, @NonNull String start_long, @NonNull String last_lat, @NonNull String last_long, @NonNull String taxi_msg, @NonNull String start_name, @NonNull String last_name, Callback<RoomBody> callback) {
         Log.i(TAG,"TMIServer emailCheck");
         tmiService.createRoom(user_token, start_lat,start_long,last_lat,last_long,taxi_msg,start_name,last_name).enqueue(callback);
+    }
+
+    public void listCall(@NonNull double my_lat, @NonNull double my_long, Callback<GuestListBody> callback) {
+        Log.i(TAG,"TMIServer listChck");
+        tmiService.listCall(my_lat,my_long).enqueue(callback);
     }
 
 }

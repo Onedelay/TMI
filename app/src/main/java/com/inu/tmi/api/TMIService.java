@@ -1,5 +1,7 @@
 package com.inu.tmi.api;
 
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -28,8 +30,8 @@ public interface TMIService {
     Call<ServerRequestBody> emailCheck(@Field("email") String email);
 
     @FormUrlEncoded
-    @POST("taxi/taxiList")
-    Call<GuestListBody> listcall(@Field("") String email);
+    @POST("taxi/taxiAllList")
+    Call<GuestListBody> listCall(@Field("my_lat") double mylat, @Field("my_long") double mylong);
 
     @POST("taxi/createRoom")
     Call<RoomBody> createRoom(@Header("user_token") String user_token, @Field("start_lat") String start_lat, @Field("start_long") String start_long,

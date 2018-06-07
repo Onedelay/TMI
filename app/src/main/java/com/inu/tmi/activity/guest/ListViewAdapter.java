@@ -48,7 +48,7 @@ public class ListViewAdapter extends BaseAdapter{
             view = inflater.inflate(R.layout.guest_listview,viewGroup,false);
         }
 
-        final ImageView userIcon = (ImageView)view.findViewById(R.id.userimage);
+       // final ImageView userIcon = (ImageView)view.findViewById(R.id.userimage);
         final TextView from = (TextView)view.findViewById(R.id.from);
         final TextView to = (TextView)view.findViewById(R.id.to);
         final TextView distance = (TextView)view.findViewById(R.id.distance);
@@ -65,11 +65,11 @@ public class ListViewAdapter extends BaseAdapter{
 
 
     //이 함수 호출하여 리스트뷰에 추가하기!~~
-    public void addListitem(Drawable Icon, String From , String To, String Distance)
+    public void addListitem( String From , String To, String Distance)
     {
         ListViewItem item = new ListViewItem();
 
-        item.setUserIcon(Icon);
+        //item.setUserIcon(Icon);
         item.setFrom(From);
         item.setTo(To);
         item.setDst(Distance);
