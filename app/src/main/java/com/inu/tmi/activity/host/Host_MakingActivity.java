@@ -6,6 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -27,7 +30,7 @@ import com.inu.tmi.activity.MainActivity;
  * Created by bmj on 2018-06-05.
  */
 
-public class Host_MakingActivity extends AppCompatActivity {
+public class Host_MakingActivity extends AppCompatActivity{
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -36,6 +39,9 @@ public class Host_MakingActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Button MtoW;  //from host_making to host_writing btn
     ImageButton BACKbtn;
+
+    public static Fragment fragment;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,31 +112,6 @@ public class Host_MakingActivity extends AppCompatActivity {
             }
         });
 
-        tabLayout = (TabLayout)findViewById(R.id.tablayout);
-        tabLayout.addTab(tabLayout.newTab().setText("현재 위치"));
-        tabLayout.addTab(tabLayout.newTab().setText("사용자 지정"));
-
-        viewPager = (ViewPager)findViewById(R.id.pager);
-        TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),this);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
 
         MtoW = (Button)findViewById(R.id.MTOW);
         MtoW.setOnClickListener(new View.OnClickListener(){
@@ -143,6 +124,22 @@ public class Host_MakingActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        final Host_TabFragment1 host_tabFragment1 = new Host_TabFragment1();
+        host_tabFragment1.setArguments(new Bundle());
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.add(R.id.map,host_tabFragment1);
+        fragmentTransaction.commit();
+
+        findViewById(R.id.myLocationButton).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                host_tabFragment1.MarkMyLocation();
+
+            }
+        });
+
 
     }
 }

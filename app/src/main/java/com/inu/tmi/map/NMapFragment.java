@@ -5,15 +5,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.nhn.android.maps.NMapContext;
 import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapLocationManager;
 import com.nhn.android.maps.NMapView;
 import com.nhn.android.maps.maplib.NGeoPoint;
-import com.nhn.android.mapviewer.overlay.NMapMyLocationOverlay;
+import com.nhn.android.maps.overlay.NMapPOIdata;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
+import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 
 /**
  * NMapFragment 클래스는 NMapActivity를 상속하지 않고 NMapView만 사용하고자 하는 경우에 NMapContext를 이용한 예제임.
@@ -24,10 +24,16 @@ public class NMapFragment extends Fragment {
     private NMapContext mMapContext;
     private NMapController mMapController;
 
+    private NMapViewerResourceProvider mMapViewerResourceProvider;
+    private NMapOverlayManager mOverlayManager;
+    private NMapPOIdata poiData;
+    private NMapPOIdataOverlay poiDataOverlay;
     private NMapLocationManager mMapLocationManager;
 
     private String CLIENT_ID = "0wrUmrxzqvLfV5oXKiPZ";
 
+    private double latitude;
+    private double longitude;
     /**
      * Fragment에 포함된 NMapView 객체를 반환함
      */
@@ -101,44 +107,38 @@ public class NMapFragment extends Fragment {
 
         // NMapActivity를 상속하지 않는 경우에는 NMapView 객체 생성후 반드시 setupMapView()를 호출해야함.
         mMapContext.setupMapView(mapView);
+
+        mMapViewerResourceProvider = new NMapViewerResourceProvider(getContext());
+        mOverlayManager = new NMapOverlayManager(getContext(), mapView, mMapViewerResourceProvider);
+
+        mMapLocationManager = new NMapLocationManager(getContext());
+        mMapLocationManager.setOnLocationChangeListener(onMyLocationChangeListener);
+        mMapLocationManager.enableMyLocation(true);
+
+        mMapController = mapView.getMapController();
+
     }
 
-    /* MyLocation Listener */
     private final NMapLocationManager.OnLocationChangeListener onMyLocationChangeListener = new NMapLocationManager.OnLocationChangeListener() {
-
         @Override
-        public boolean onLocationChanged(NMapLocationManager locationManager, NGeoPoint myLocation) {
-
-            if (mMapController != null) {
-                mMapController.animateTo(myLocation);
-            }
+        public boolean onLocationChanged(NMapLocationManager nMapLocationManager, NGeoPoint nGeoPoint) {
+            latitude = nGeoPoint.getLatitude();
+            longitude = nGeoPoint.getLongitude();
 
             return true;
         }
 
         @Override
-        public void onLocationUpdateTimeout(NMapLocationManager locationManager) {
+        public void onLocationUpdateTimeout(NMapLocationManager nMapLocationManager) {
 
-            // stop location updating
-            //			Runnable runnable = new Runnable() {
-            //				public void run() {
-            //					stopMyLocation();
-            //				}
-            //			};
-            //			runnable.run();
-
-            Toast.makeText(getContext(), "Your current location is temporarily unavailable.", Toast.LENGTH_LONG).show();
         }
 
         @Override
-        public void onLocationUnavailableArea(NMapLocationManager locationManager, NGeoPoint myLocation) {
+        public void onLocationUnavailableArea(NMapLocationManager nMapLocationManager, NGeoPoint nGeoPoint) {
 
-            Toast.makeText(getContext(), "Your current location is unavailable area.", Toast.LENGTH_LONG).show();
-
-            //stopMyLocation();
         }
-
     };
+
 
     @Override
     public void onStart() {
@@ -179,5 +179,27 @@ public class NMapFragment extends Fragment {
         mMapContext.onDestroy();
 
         super.onDestroy();
+    }
+
+    public void MarkMyLocation()
+    {
+        int markerId = NMapPOIflagType.PIN;
+
+        if(poiDataOverlay != null && !poiDataOverlay.isHidden()) {
+            poiDataOverlay.setHidden(true);
+        }
+
+        // set POI data
+        poiData = new NMapPOIdata(1, mMapViewerResourceProvider);
+        poiData.beginPOIdata(1);
+        poiData.addPOIitem(longitude,latitude, "내위치", markerId, 0);
+        poiData.endPOIdata();
+
+        // create POI data overlay
+        poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
+        poiDataOverlay.setHidden(false);
+
+        // show all POI data
+        poiDataOverlay.showAllPOIdata(0);
     }
 }

@@ -2,7 +2,6 @@ package com.inu.tmi.activity.host;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +9,13 @@ import android.view.ViewGroup;
 import com.inu.tmi.R;
 import com.inu.tmi.map.NMapFragment;
 
+
 /**
  * Created by bmj on 2018-06-05.
  */
 
 public class Host_TabFragment1 extends NMapFragment {
+
 
     @Nullable
     @Override
@@ -24,4 +25,6 @@ public class Host_TabFragment1 extends NMapFragment {
 
         return view;
     }
+
+
 }
