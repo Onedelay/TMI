@@ -8,6 +8,8 @@
 
     <string name="spinner_title">목적지를 선택</string>
     <string name="str_name">이름</string>
+    <string name="str_refresh">새로고침</string>
+    <string name="str_email">Email</string>
     <string-array name="dst_arrays">
         <item>인천대 정문</item>
         <item>인천대 자연대</item>

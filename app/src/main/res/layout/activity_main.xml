@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="sample.yap.ooba.tmi.MainActivity">
+        tools:context="sample.yap.ooba.tmi.MainActivity"
+        android:gravity="">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -28,23 +29,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/colorBlack"
-                android:textSize="24sp" />
-
+                android:textSize="24sp"/>
         </android.support.v7.widget.Toolbar>
 
         <Button
             android:id="@+id/host"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="탈사람!" />
+            android:background="@drawable/btn_host"
+            android:layout_marginTop="40dp"/>
 
         <Button
             android:id="@+id/guest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="탈래요!" />
+            android:background="@drawable/btn_guest"
+            android:layout_marginTop="10dp"/>
 
 
     </LinearLayout>

@@ -56,7 +56,6 @@ public class ListViewAdapter extends BaseAdapter{
 
         final ListViewItem list = listViewItems.get(i);
 
-        userIcon.setImageDrawable(list.getUserIcon());
         from.setText(list.getFrom());
         to.setText(list.getTo());
         distance.setText(list.getDst());

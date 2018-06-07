@@ -120,10 +120,6 @@ public class MainActivity extends AppCompatActivity {
         TextView useremail = (TextView)hView.findViewById(R.id.useremail);
         useremail.setText(SharedPrefManager.preferencesLoadString(this, "email"));
 
-
-
-
-
         //탈사람 눌렀을 때
         Host = (Button)findViewById(R.id.host);
         Host.setOnClickListener(new View.OnClickListener(){
@@ -131,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent =new Intent(MainActivity.this, Host_WritingActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -142,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent =new Intent(MainActivity.this, Guest_ParticipaintingActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }
