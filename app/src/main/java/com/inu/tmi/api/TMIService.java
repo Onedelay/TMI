@@ -19,13 +19,13 @@ public interface TMIService {
 
     //로그인
     @FormUrlEncoded
-    @POST("user/login/send")
-    Call<RequestBody> login(@Field("email") String email, @Field("pwd") String pwd);
+    @POST("user/login")
+    Call<LoginBody> login(@Field("email") String email, @Field("pwd") String pwd);
 
     //이메일 중복 체크
 
     @FormUrlEncoded
-    @POST("user/signup/emaiㅣ")
+    @POST("user/signup/email")
     Call<RequestBody> emailCheck(@Field("email") String email);
 
 }

@@ -42,8 +42,7 @@ public class TMIServer extends Application{
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-        Retrofit.Builder builder = new Retrofit.Builder();
-        Retrofit retrofit = builder
+        Retrofit retrofit  = new Retrofit.Builder()
                 .baseUrl(ServerUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
@@ -52,30 +51,14 @@ public class TMIServer extends Application{
         tmiService = retrofit.create(TMIService.class);
     }
 
-/*
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        TMIServer.instance = this;
-        buildRequestService();
-    }
-*/
 
-
-    private void buildRequestService(){
-        Log.i(TAG,"Retrofit Builder");
-
-    }
-
-
-
-/*    public void signUp(@NonNull String email, @NonNull String pwd, Callback<RequestBody> callback) {
+    public void signUp(@NonNull String email, @NonNull String pwd, Callback<RequestBody> callback) {
        tmiService.signUp(email,pwd).enqueue(callback);
     }
 
-    public void login(@NonNull String email, @NonNull String pwd, Callback<RequestBody> callback) {
+    public void login(@NonNull String email, @NonNull String pwd, Callback<LoginBody> callback) {
         tmiService.login(email,pwd).enqueue(callback);
-    }*/
+    }
 
     public void emailCheck(@NonNull String email, Callback<RequestBody> callback) {
         Log.i(TAG,"TMIServer emailCheck");
