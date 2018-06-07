@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapContext;
@@ -16,6 +18,7 @@ import com.nhn.android.maps.maplib.NGeoPoint;
 import com.nhn.android.maps.nmapmodel.NMapError;
 import com.nhn.android.maps.nmapmodel.NMapPlacemark;
 import com.nhn.android.maps.overlay.NMapPOIdata;
+import com.nhn.android.maps.overlay.NMapPOIitem;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 
@@ -36,9 +39,14 @@ public class NMapFragment extends Fragment {
     private NMapOverlayManager mOverlayManager;
     private NMapPOIdataOverlay poiDataOverlay;
 
+    private NMapPOIdataOverlay mFloatingPOIdataOverlay;
+    private NMapPOIitem mFloatingPOIitem;
+
     private double latitude;
     private double longitude;
     private String address;
+
+    private NGeoPoint initPoint;
 
     /**
      * Fragment에 포함된 NMapView 객체를 반환함
@@ -90,7 +98,7 @@ public class NMapFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         // Fragment에 포함된 NMapView 객체 찾기
-        NMapView mapView = findMapView(super.getView());
+        final NMapView mapView = findMapView(super.getView());
         if (mapView == null) {
             throw new IllegalArgumentException("NMapFragment dose not have an instance of NMapView.");
         }
@@ -105,6 +113,32 @@ public class NMapFragment extends Fragment {
         NMapLocationManager mMapLocationManager = new NMapLocationManager(getContext());
         mMapLocationManager.setOnLocationChangeListener(onMyLocationChangeListener);
         mMapLocationManager.enableMyLocation(true);
+
+        NMapLocationManager initPosition = new NMapLocationManager(getContext());
+        initPosition.setOnLocationChangeListener(new NMapLocationManager.OnLocationChangeListener() {
+            @Override
+            public boolean onLocationChanged(NMapLocationManager nMapLocationManager, NGeoPoint nGeoPoint) {
+                if (mMapController != null) {
+                    mMapController.animateTo(nGeoPoint);
+                    mMapController.setMapCenter(nGeoPoint);
+                }
+
+                MarkMyLocation();
+                return false;
+            }
+
+            @Override
+            public void onLocationUpdateTimeout(NMapLocationManager nMapLocationManager) {
+
+            }
+
+            @Override
+            public void onLocationUnavailableArea(NMapLocationManager nMapLocationManager, NGeoPoint nGeoPoint) {
+
+            }
+        });
+
+        initPosition.enableMyLocation(true);
 
         mMapContext.setMapDataProviderListener(onDataProviderListener);
 
@@ -140,7 +174,9 @@ public class NMapFragment extends Fragment {
     private final NMapActivity.OnDataProviderListener onDataProviderListener = new NMapActivity.OnDataProviderListener() {
         @Override
         public void onReverseGeocoderResponse(NMapPlacemark placeMark, NMapError errInfo) {
-            address = placeMark.toString();
+            if (address != null) {
+                address = placeMark.toString();
+            }
             if (DEBUG) {
                 Log.i(LOG_TAG, "onReverseGeocoderResponse: placeMark="
                         + ((placeMark != null) ? placeMark.toString() : null));
@@ -152,6 +188,46 @@ public class NMapFragment extends Fragment {
             }
         }
 
+    };
+
+    private final NMapPOIdataOverlay.OnFloatingItemChangeListener onPOIdataFloatingItemChangeListener = new NMapPOIdataOverlay.OnFloatingItemChangeListener() {
+
+        @Override
+        public void onPointChanged(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
+            NGeoPoint point = item.getPoint();
+
+            if (DEBUG) {
+                Log.i(LOG_TAG, "onPointChanged: point=" + point.toString());
+            }
+
+            mMapContext.findPlacemarkAtLocation(point.longitude, point.latitude);
+
+            item.setTitle(address);
+
+        }
+    };
+
+    private final NMapPOIdataOverlay.OnStateChangeListener onPOIdataStateChangeListener = new NMapPOIdataOverlay.OnStateChangeListener() {
+
+        @Override
+        public void onCalloutClick(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
+            if (DEBUG) {
+                Log.i(LOG_TAG, "onCalloutClick: title=" + item.getTitle());
+            }
+
+            // [[TEMP]] handle a click event of the callout
+        }
+
+        @Override
+        public void onFocusChanged(NMapPOIdataOverlay poiDataOverlay, NMapPOIitem item) {
+            if (DEBUG) {
+                if (item != null) {
+                    Log.i(LOG_TAG, "onFocusChanged: " + item.toString());
+                } else {
+                    Log.i(LOG_TAG, "onFocusChanged: ");
+                }
+            }
+        }
     };
 
     public void MarkMyLocation() {
@@ -169,9 +245,29 @@ public class NMapFragment extends Fragment {
         poiData.addPOIitem(longitude, latitude, address, markerId, 0);
         poiData.endPOIdata();
 
+        NMapPOIitem item = poiData.getPOIitem(0);
+
+        if(item != null){
+            item.setPoint(mMapController.getMapCenter());
+            // set floating mode
+            item.setFloatingMode(NMapPOIitem.FLOATING_TOUCH | NMapPOIitem.FLOATING_DRAG);
+            // show right button on callout
+            item.setRightButton(true);
+            mFloatingPOIitem = item;
+        }
+
         // create POI data overlay
         poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
-        poiDataOverlay.setHidden(false);
+        if (poiDataOverlay != null) {
+            poiDataOverlay.setOnFloatingItemChangeListener(onPOIdataFloatingItemChangeListener);
+
+            // set event listener to the overlay
+            poiDataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
+
+            poiDataOverlay.selectPOIitem(0, false);
+
+            mFloatingPOIdataOverlay = poiDataOverlay;
+        }
 
         // show all POI data
         poiDataOverlay.showAllPOIdata(0);
