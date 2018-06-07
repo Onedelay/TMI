@@ -14,7 +14,11 @@ import com.inu.tmi.map.NMapFragment;
  * Created by bmj on 2018-06-05.
  */
 
+<<<<<<< HEAD:app/src/main/java/com/inu/tmi/activity/host/Host_TabFragment.java
 public class Host_TabFragment extends NMapFragment {
+=======
+public class Host_TabFragment1 extends NMapFragment {
+>>>>>>> d53989302891a3f1a72cc48e6e5c5cb5397e5923:app/src/main/java/com/inu/tmi/activity/host/Host_TabFragment1.java
 
     @Nullable
     @Override
