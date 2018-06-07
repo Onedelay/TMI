@@ -131,15 +131,5 @@ public class Guest_ParticipaintingActivity extends AppCompatActivity {
 
             }
         });
-
-        GtoS = (Button)findViewById(R.id.GTOS);
-        GtoS.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Guest_ParticipaintingActivity.this,Host_SuccessActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 }
