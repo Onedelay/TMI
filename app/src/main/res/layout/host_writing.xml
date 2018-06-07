@@ -104,7 +104,7 @@
                 android:layout_weight="0.5"
                 android:drawSelectorOnTop="true"
                 android:entries="@array/dst_arrays"
-                android:prompt="@string/spinner_title" />
+                android:prompt="@string/spinner_title"/>
 
         </LinearLayout>
 
@@ -120,15 +120,16 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text=" 타이머 : " />
+                android:text=" 한마디 : " />
 
-            <TextView
-                android:id="@+id/textView4"
+            <Spinner
+                android:id="@+id/commentspinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="10dp"
                 android:layout_weight="0.5"
-                android:gravity="center"
-                android:text="추후에 만들어용!~~!" />
+                android:drawSelectorOnTop="true"
+                android:entries="@array/comment_arrays" />
 
         </LinearLayout>
 
@@ -146,7 +147,6 @@
             android:layout_weight="0.5"
             android:gravity="bottom|center"
             android:text="지정 완료" />
-
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
@@ -155,8 +155,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="end"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer">
-
+        app:menu="@menu/drawer" >
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

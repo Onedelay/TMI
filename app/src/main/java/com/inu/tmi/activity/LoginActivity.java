@@ -176,11 +176,12 @@ public class LoginActivity extends AppCompatActivity {
                                         if(autoLogin.isChecked()) {
                                             Log.i("info : ","autoLogin Check");
                                             AutoLogin(ID.getText().toString(), PW.getText().toString());
+                                            UserInfoSave(loginBody.getUserInfo().getUser_name(), loginBody.getUserInfo().getEmail(), loginBody.getUserInfo().getUser_img());
                                         }
                                         else{
                                             SharedPrefManager.NotAutoLogin(LoginActivity.this);
                                         }
-
+                                        UserInfoSave(loginBody.getUserInfo().getUser_name(), loginBody.getUserInfo().getEmail(), loginBody.getUserInfo().getUser_img());
                                         //로그인 성공 시 메인 액티비티로 intent
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -250,6 +251,17 @@ public class LoginActivity extends AppCompatActivity {
         boolean result = SharedPrefManager.preferenceSave(this,"id",id);
         Log.i("info : ","AutoLogin " + result);
         result = SharedPrefManager.preferenceSave(this,"pass",pass);
+        Log.i("info : ","AutoLogin " + result);
+    }
+
+    public void UserInfoSave(String name, String email, String image)
+    {
+        boolean result;
+        result = SharedPrefManager.preferenceSave(this,"name",name);
+        Log.i("info : ","AutoLogin " + result);
+        result = SharedPrefManager.preferenceSave(this,"email",email);
+        Log.i("info : ","AutoLogin " + result);
+        result = SharedPrefManager.preferenceSave(this,"image",image);
         Log.i("info : ","AutoLogin " + result);
     }
 }
