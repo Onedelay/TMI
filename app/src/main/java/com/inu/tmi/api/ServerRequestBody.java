@@ -1,6 +1,6 @@
 package com.inu.tmi.api;
 
-public class RequestBody {
+public class ServerRequestBody {
     String msg;
 
     public String getMsg() {

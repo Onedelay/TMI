@@ -48,7 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         PW = (EditText)findViewById(R.id.PWtxt);
         final CheckBox autoLogin = (CheckBox)findViewById(R.id.checkBox);
 
-        if(SharedPrefManager.preferencesLoadBoolean(this,"AutoLogin")) { //자동로그인 할때
+        //자동로그인 할때
+        if(SharedPrefManager.preferencesLoadBoolean(this,"AutoLogin")) {
             ID.setText(SharedPrefManager.preferencesLoadString(this, "id"));
             PW.setText(SharedPrefManager.preferencesLoadString(this, "pass"));
 
@@ -222,6 +223,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_LOGIN);
             }
         });
+
+
 
     }
 

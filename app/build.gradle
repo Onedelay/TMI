@@ -15,7 +15,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
+        debug {
+            testCoverageEnabled = true
+        }
+        }
     useLibrary 'org.apache.http.legacy'
 
 
@@ -34,4 +37,6 @@ dependencies {
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.2.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+
+    implementation 'com.github.jkwiecien:EasyImage:2.0.4'
 }
