@@ -31,6 +31,10 @@ public class Guest_TabFragment1 extends Fragment {
         fragmentTransaction.add(R.id.map,host_tabFragment1);
         fragmentTransaction.commit();
 
+
+        //TODO
+        //현재 위치 위도 경도 서버에 보내기
+
         return view;
     }
 }

@@ -32,6 +32,9 @@ public interface TMIService {
     @POST("user/signup/email")
     Call<ServerRequestBody> emailCheck(@Field("email") String email);
 
+    @FormUrlEncoded
+    @POST("taxi/taxiList")
+    Call<GuestListBody> listcall(@Field("") String email);
 
 
 }

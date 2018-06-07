@@ -40,6 +40,7 @@ public class Guest_TabFragment2 extends Fragment {
             @Override
             public void onClick(View view) {
                 Refresh();//
+
             }
         });
         return view;
