@@ -34,6 +34,7 @@ public interface TMIService {
     @POST("taxi/taxiAllList")
     Call<GuestListBody> listCall(@Field("my_lat") double mylat, @Field("my_long") double mylong);
 
+    @FormUrlEncoded
     @POST("taxi/createRoom")
     Call<RoomBody> createRoom(@Header("user_token") String user_token, @Field("start_lat") String start_lat, @Field("start_long") String start_long,
                               @Field("last_lat") String last_lat, @Field("last_long") String last_long,
