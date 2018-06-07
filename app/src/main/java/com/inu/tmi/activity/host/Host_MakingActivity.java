@@ -136,7 +136,6 @@ public class Host_MakingActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 host_tabFragment1.MarkMyLocation();
-
             }
         });
 

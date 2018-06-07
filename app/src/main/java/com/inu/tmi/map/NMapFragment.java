@@ -2,15 +2,19 @@ package com.inu.tmi.map;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapContext;
 import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapLocationManager;
 import com.nhn.android.maps.NMapView;
 import com.nhn.android.maps.maplib.NGeoPoint;
+import com.nhn.android.maps.nmapmodel.NMapError;
+import com.nhn.android.maps.nmapmodel.NMapPlacemark;
 import com.nhn.android.maps.overlay.NMapPOIdata;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
@@ -21,19 +25,21 @@ import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
  */
 
 public class NMapFragment extends Fragment {
-    private NMapContext mMapContext;
-    private NMapController mMapController;
-
-    private NMapViewerResourceProvider mMapViewerResourceProvider;
-    private NMapOverlayManager mOverlayManager;
-    private NMapPOIdata poiData;
-    private NMapPOIdataOverlay poiDataOverlay;
-    private NMapLocationManager mMapLocationManager;
+    private static final boolean DEBUG = false;
+    private static final String LOG_TAG = "TMI";
 
     private String CLIENT_ID = "0wrUmrxzqvLfV5oXKiPZ";
 
+    private NMapContext mMapContext;
+    private NMapController mMapController;
+    private NMapViewerResourceProvider mMapViewerResourceProvider;
+    private NMapOverlayManager mOverlayManager;
+    private NMapPOIdataOverlay poiDataOverlay;
+
     private double latitude;
     private double longitude;
+    private String address;
+
     /**
      * Fragment에 포함된 NMapView 객체를 반환함
      */
@@ -76,9 +82,7 @@ public class NMapFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         throw new IllegalArgumentException("onCreateView should be implemented in the subclass of NMapFragment.");
-
     }
 
     @Override
@@ -98,12 +102,11 @@ public class NMapFragment extends Fragment {
         mapView.setFocusableInTouchMode(true);
         mapView.requestFocus();
 
-        mMapController = mapView.getMapController();
-
-        mMapLocationManager = new NMapLocationManager(getContext());
+        NMapLocationManager mMapLocationManager = new NMapLocationManager(getContext());
         mMapLocationManager.setOnLocationChangeListener(onMyLocationChangeListener);
+        mMapLocationManager.enableMyLocation(true);
 
-        mMapContext.setupMapView(mapView);
+        mMapContext.setMapDataProviderListener(onDataProviderListener);
 
         // NMapActivity를 상속하지 않는 경우에는 NMapView 객체 생성후 반드시 setupMapView()를 호출해야함.
         mMapContext.setupMapView(mapView);
@@ -111,12 +114,7 @@ public class NMapFragment extends Fragment {
         mMapViewerResourceProvider = new NMapViewerResourceProvider(getContext());
         mOverlayManager = new NMapOverlayManager(getContext(), mapView, mMapViewerResourceProvider);
 
-        mMapLocationManager = new NMapLocationManager(getContext());
-        mMapLocationManager.setOnLocationChangeListener(onMyLocationChangeListener);
-        mMapLocationManager.enableMyLocation(true);
-
         mMapController = mapView.getMapController();
-
     }
 
     private final NMapLocationManager.OnLocationChangeListener onMyLocationChangeListener = new NMapLocationManager.OnLocationChangeListener() {
@@ -139,6 +137,45 @@ public class NMapFragment extends Fragment {
         }
     };
 
+    private final NMapActivity.OnDataProviderListener onDataProviderListener = new NMapActivity.OnDataProviderListener() {
+        @Override
+        public void onReverseGeocoderResponse(NMapPlacemark placeMark, NMapError errInfo) {
+            address = placeMark.toString();
+            if (DEBUG) {
+                Log.i(LOG_TAG, "onReverseGeocoderResponse: placeMark="
+                        + ((placeMark != null) ? placeMark.toString() : null));
+            }
+
+            if (errInfo != null) {
+                Log.e(LOG_TAG, "Failed to findPlacemarkAtLocation: error=" + errInfo.toString());
+                return;
+            }
+        }
+
+    };
+
+    public void MarkMyLocation() {
+        mMapContext.findPlacemarkAtLocation(longitude, latitude);
+
+        int markerId = NMapPOIflagType.PIN;
+
+        if (poiDataOverlay != null && !poiDataOverlay.isHidden()) {
+            poiDataOverlay.setHidden(true);
+        }
+
+        // set POI data
+        NMapPOIdata poiData = new NMapPOIdata(1, mMapViewerResourceProvider);
+        poiData.beginPOIdata(1);
+        poiData.addPOIitem(longitude, latitude, address, markerId, 0);
+        poiData.endPOIdata();
+
+        // create POI data overlay
+        poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
+        poiDataOverlay.setHidden(false);
+
+        // show all POI data
+        poiDataOverlay.showAllPOIdata(0);
+    }
 
     @Override
     public void onStart() {
@@ -150,22 +187,18 @@ public class NMapFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         mMapContext.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
         mMapContext.onPause();
     }
 
     @Override
     public void onStop() {
-
         mMapContext.onStop();
-
         super.onStop();
     }
 
@@ -177,29 +210,6 @@ public class NMapFragment extends Fragment {
     @Override
     public void onDestroy() {
         mMapContext.onDestroy();
-
         super.onDestroy();
-    }
-
-    public void MarkMyLocation()
-    {
-        int markerId = NMapPOIflagType.PIN;
-
-        if(poiDataOverlay != null && !poiDataOverlay.isHidden()) {
-            poiDataOverlay.setHidden(true);
-        }
-
-        // set POI data
-        poiData = new NMapPOIdata(1, mMapViewerResourceProvider);
-        poiData.beginPOIdata(1);
-        poiData.addPOIitem(longitude,latitude, "내위치", markerId, 0);
-        poiData.endPOIdata();
-
-        // create POI data overlay
-        poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
-        poiDataOverlay.setHidden(false);
-
-        // show all POI data
-        poiDataOverlay.showAllPOIdata(0);
     }
 }
