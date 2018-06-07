@@ -10,8 +10,6 @@ import android.widget.Toast;
 
 import com.inu.tmi.R;
 import com.inu.tmi.api.RequestBody;
-import com.inu.tmi.api.TMIBody;
-import com.inu.tmi.api.TMINetwork;
 import com.inu.tmi.api.TMIServer;
 
 import retrofit2.Call;
@@ -49,6 +47,18 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onResponse(Call<RequestBody> call, Response<RequestBody> response) {
                             if(response.body() != null){
                                 Log.i(TAG,"응답");
+                                String requestBody = response.body().getMsg();
+                                Log.i(TAG,"emailCheckBody : "+ requestBody);
+                                if(requestBody.equals("duplicate email")){
+                                    Toast.makeText(getApplicationContext(),"중복 이메일 입니다.", Toast.LENGTH_SHORT).show();
+                                }
+                                else if(requestBody.equals("email available")){
+                                    Toast.makeText(getApplicationContext(),"사용 가능한 이메일 입니다.", Toast.LENGTH_SHORT).show();
+                                    duplicateCheck = 1;
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(),"잘못된 이메일 입니다." + requestBody, Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
 
@@ -61,28 +71,6 @@ public class RegisterActivity extends AppCompatActivity {
                     });
 
                     Log.i(TAG,"emailCheck end");
-                  /*  TMINetwork tmiNetwork = new TMINetwork();
-                    tmiNetwork.getJSON(ID.getText().toString());*/
-/*
-
-                    TMINetwork.emailCheck(ID.getText().toString(), new TMINetwork.OnRequestListener(){
-                        @Override
-                        public void OnRequestComplete() {
-                            String emailCheckBody = TMIBody.getEmailCheckBody();
-                            Log.i(TAG,"emailCheckBody : "+ emailCheckBody);
-                            if(emailCheckBody.equals("duplicate email")){
-                                Toast.makeText(getApplicationContext(),"중복 이메일 입니다.", Toast.LENGTH_SHORT).show();
-                            }
-                            else if(emailCheckBody.equals("success")){
-                                Toast.makeText(getApplicationContext(),"사용 가능한 이메일 입니다.", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(),"잘못된 이메일 입니다." + emailCheckBody, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-*/
-
                 }
             }
         });
@@ -106,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"이메일 중복 체크 하세요", Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        /*TMIServer.getInstance().login(ID.getText().toString(), PW.getText().toString(), new Callback<RequestBody>() {
+                        TMIServer.getInstance().signUp(ID.getText().toString(), PW.getText().toString(), new Callback<RequestBody>() {
                             @Override
                             public void onResponse(Call<RequestBody> call, Response<RequestBody> response) {
                                 if(response.body() != null){
@@ -115,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     if(requestBody.getMsg().equals("success")){
                                         //로그인 성공 시 메인 액티비티로 intent
-                                        Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
+                                        Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
                                         intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(intent);
                                         finish();
@@ -132,9 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             }
                         });
-*/
                     }
-
                 }
             }
         });

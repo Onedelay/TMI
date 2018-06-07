@@ -9,12 +9,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.inu.tmi.R;
+import com.inu.tmi.SharedPrefManager;
+import com.inu.tmi.api.LoginBody;
 import com.inu.tmi.api.RequestBody;
 import com.inu.tmi.api.TMIServer;
 import com.inu.tmi.api.TMIService;
@@ -28,7 +32,7 @@ import retrofit2.Response;
  */
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "TMI.LoginActivity";
+    private static final String TAG = "TMI.TMILoginActivity";
     public static final int REQUEST_LOGIN = 100;
 
     EditText ID;
@@ -43,6 +47,104 @@ public class LoginActivity extends AppCompatActivity {
 
         ID = (EditText)findViewById(R.id.IDtxt);
         PW = (EditText)findViewById(R.id.PWtxt);
+        final CheckBox autoLogin = (CheckBox)findViewById(R.id.checkBox);
+
+        if(SharedPrefManager.preferencesLoadBoolean(this,"AutoLogin")) { //자동로그인 할때
+            ID.setText(SharedPrefManager.preferencesLoadString(this, "id"));
+            PW.setText(SharedPrefManager.preferencesLoadString(this, "pass"));
+
+            Log.i("info : login", "auto login");
+
+            TMIServer.getInstance().login(ID.getText().toString(), PW.getText().toString(), new Callback<LoginBody>() {
+                @Override
+                public void onResponse(Call<LoginBody> call, Response<LoginBody> response) {
+                    if(response.isSuccessful())
+                    {
+                        Log.i(TAG, response.body().getMsg());
+                        if(response.body() != null) {
+                            Log.i(TAG, " : signup success - ");
+                            LoginBody loginBody = response.body();
+
+                            if (loginBody.getMsg().equals("email not validated") || loginBody.getMsg().equals("success")) {
+                                //로그인 성공 시 메인 액티비티로 intent
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Log.i(TAG, " : response fail ");
+                        //Log.i(TAG,response.body().toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginBody> call, Throwable t) {
+                    Log.i(TAG, " : register fail - " + t.toString());
+                }
+            });
+
+        }
+        else { //자동로그인 안할때
+
+            ID.setNextFocusDownId(R.id.IDtxt);
+            PW.setNextFocusDownId(R.id.PWtxt);
+
+            PW.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)) {
+                        Log.i("info : login","no auto login");
+                        TMIServer.getInstance().login(ID.getText().toString(), PW.getText().toString(), new Callback<LoginBody>() {
+                            @Override
+                            public void onResponse(Call<LoginBody> call, Response<LoginBody> response) {
+                                if(response.isSuccessful())
+                                {
+                                    Log.i(TAG, response.body().getMsg());
+                                    if(response.body() != null) {
+                                        Log.i(TAG, " : signup success - ");
+                                        LoginBody loginBody = response.body();
+
+                                        if (loginBody.getMsg().equals("email not validated") || loginBody.getMsg().equals("success")) {
+                                            //로그인 성공 시 메인 액티비티로 intent
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Log.i(TAG, " : response fail ");
+                                    //Log.i(TAG,response.body().toString());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<LoginBody> call, Throwable t) {
+                                Log.i(TAG, " : register fail - " + t.toString());
+                            }
+                        });
+
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+
+
+        }
+
+
 
         findViewById(R.id.loginbtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,37 +159,50 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    /*TMIServer.getInstance().login(ID.getText().toString(), PW.getText().toString(), new Callback<RequestBody>() {
-                        @Override
-                        public void onResponse(Call<RequestBody> call, Response<RequestBody> response) {
-                            if(response.body() != null){
-                                Log.i(TAG, " : login success - ");
-                                RequestBody requestBody = response.body();
+                    Log.i(TAG, " : login  - id : " + ID.getText().toString()+" pw : "+ PW.getText().toString());
 
-                                if(requestBody.getMsg().equals("success")){
-                                    //로그인 성공 시 메인 액티비티로 intent
-                                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                    intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    finish();
+                    TMIServer.getInstance().login(ID.getText().toString(), PW.getText().toString(), new Callback<LoginBody>() {
+                        @Override
+                        public void onResponse(Call<LoginBody> call, Response<LoginBody> response) {
+                            if(response.isSuccessful())
+                            {
+                                Log.i(TAG, response.body().getMsg());
+                                if(response.body() != null) {
+                                    Log.i(TAG, " : signup success - ");
+                                    LoginBody loginBody = response.body();
+
+                                    if (loginBody.getMsg().equals("email not validated") || loginBody.getMsg().equals("success")) {
+                                        //자동로그인
+                                        if(autoLogin.isChecked()) {
+                                            Log.i("info : ","autoLogin Check");
+                                            AutoLogin(ID.getText().toString(), PW.getText().toString());
+                                        }
+                                        else{
+                                            SharedPrefManager.NotAutoLogin(LoginActivity.this);
+                                        }
+
+                                        //로그인 성공 시 메인 액티비티로 intent
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                                else{
-                                    Toast.makeText(getApplicationContext(),"로그인 실패", Toast.LENGTH_SHORT).show();
-                                }
+                            }
+                            else
+                            {
+                                Log.i(TAG, " : response fail ");
+                                //Log.i(TAG,response.body().toString());
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<RequestBody> call, Throwable t) {
-                            Log.i(TAG, " : login fail - " + t.toString());
-
+                        public void onFailure(Call<LoginBody> call, Throwable t) {
+                            Log.i(TAG, " : register fail - " + t.toString());
                         }
                     });
-*/
-
-
-
-
                 }
             }
         });
@@ -125,5 +240,14 @@ public class LoginActivity extends AppCompatActivity {
         if (permFineLoc != PackageManager.PERMISSION_GRANTED && permCoaLoc != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
+    }
+
+    public void AutoLogin(String id, String pass){
+        SharedPrefManager.preferenceSave(this,"AutoLogin",true);
+        Log.i("info : ","AutoLogin Save");
+        boolean result = SharedPrefManager.preferenceSave(this,"id",id);
+        Log.i("info : ","AutoLogin " + result);
+        result = SharedPrefManager.preferenceSave(this,"pass",pass);
+        Log.i("info : ","AutoLogin " + result);
     }
 }

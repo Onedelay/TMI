@@ -1,13 +1,13 @@
 package com.inu.tmi.api;
 
 public class RequestBody {
-    int msg;
+    String msg;
 
-    public int getMsg() {
+    public String getMsg() {
         return msg;
     }
 
-    public void setMsg(int msg) {
+    public void setMsg(String msg) {
         this.msg = msg;
     }
 }
