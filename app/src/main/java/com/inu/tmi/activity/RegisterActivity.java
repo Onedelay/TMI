@@ -143,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                         RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
                         MultipartBody.Part body = MultipartBody.Part.createFormData("cycle", file.getName(), reqFile);
 
+
                         TMIServer.getInstance().signUp(ID.getText().toString(), PW.getText().toString(), NAME.getText().toString(), file, new Callback<ServerRequestBody>() {
                             @Override
                             public void onResponse(Call<ServerRequestBody> call, Response<ServerRequestBody> response) {
@@ -313,7 +314,7 @@ public class RegisterActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    private String getRealPathFromURI(Uri contentUri) {
+   /* private String getRealPathFromURI(Uri contentUri) {
         int column_index=0;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
@@ -323,7 +324,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         return cursor.getString(column_index);
     }
-
+*/
     private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
         Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
         if (cursor == null) {
