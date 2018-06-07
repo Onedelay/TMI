@@ -1,8 +1,12 @@
 package com.inu.tmi.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_main);
+        permissionCheck();
 
         ID = (EditText)findViewById(R.id.IDtxt);
         PW = (EditText)findViewById(R.id.PWtxt);
@@ -103,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_LOGIN);
             }
         });
+
     }
 
     @Override
@@ -110,5 +116,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // 회원가입 성공 시 데이터 바로 입력해서 로그인 고!
+    }
+
+    public void permissionCheck() {
+        int permFineLoc = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int permCoaLoc = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if (permFineLoc != PackageManager.PERMISSION_GRANTED && permCoaLoc != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
     }
 }
