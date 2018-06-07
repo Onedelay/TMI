@@ -113,6 +113,8 @@ public class NMapFragment extends Fragment {
         mMapLocationManager.setOnLocationChangeListener(onMyLocationChangeListener);
         mMapLocationManager.enableMyLocation(true);
 
+        mMapContext.setMapDataProviderListener(onDataProviderListener);
+
         NMapLocationManager initPosition = new NMapLocationManager(getContext());
         initPosition.setOnLocationChangeListener(new NMapLocationManager.OnLocationChangeListener() {
             @Override
@@ -138,8 +140,6 @@ public class NMapFragment extends Fragment {
         });
 
         initPosition.enableMyLocation(true);
-
-        mMapContext.setMapDataProviderListener(onDataProviderListener);
 
         // NMapActivity를 상속하지 않는 경우에는 NMapView 객체 생성후 반드시 setupMapView()를 호출해야함.
         mMapContext.setupMapView(mapView);
@@ -169,7 +169,6 @@ public class NMapFragment extends Fragment {
             longitude = nGeoPoint.getLongitude();
 
             point = nGeoPoint;
-
             return true;
         }
 
@@ -269,7 +268,7 @@ public class NMapFragment extends Fragment {
             item.setFloatingMode(NMapPOIitem.FLOATING_TOUCH | NMapPOIitem.FLOATING_DRAG);
             // show right button on callout
             mFloatingPOIitem = item;
-            selectPoint = mFloatingPOIitem.getPoint();
+            point = mFloatingPOIitem.getPoint();
         }
 
         // create POI data overlay
