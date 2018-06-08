@@ -124,6 +124,8 @@ public class NMapFragment extends Fragment {
                     mMapController.setMapCenter(nGeoPoint);
                 }
 
+                point = nGeoPoint;
+
                 MarkMyLocation();
                 return false;
             }

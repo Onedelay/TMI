@@ -1,8 +1,14 @@
 package com.inu.tmi.activity.guest;
 
+import android.Manifest;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,11 +40,24 @@ public class Guest_TabFragment2 extends Fragment {
 
     private ArrayList<ListViewItem> items;
 
+    private double lat;
+    private double lng;
+
+    private LocationManager locationManager;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.guest_tabfragment2, container, false);
+
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+        ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+        Refresh(lat, lng);
 
         items = new ArrayList<>();
 
@@ -59,24 +78,44 @@ public class Guest_TabFragment2 extends Fragment {
             }
         });
 
-        //Refresh();
-
         ImageButton refreshbtn = (ImageButton) view.findViewById(R.id.refresh);
         refreshbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Refresh();//
-
+                Refresh(lat, lng);
             }
         });
         return view;
     }
 
-    public void Refresh() {
+    LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    };
+
+    public void Refresh(double lat, double lng) {
         //TODO
         //서버에서 주최자, 출발지 , 목적지, 위도 경도 갖고와서
 
-        TMIServer.getInstance().listCall(12.22, 12.22, new Callback<GuestListBody>() {
+        TMIServer.getInstance().listCall(lat, lng, new Callback<GuestListBody>() {
             @Override
             public void onResponse(Call<GuestListBody> call, Response<GuestListBody> response) {
                 if (response.isSuccessful()) {
