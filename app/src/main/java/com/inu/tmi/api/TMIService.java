@@ -15,9 +15,9 @@ import retrofit2.http.Part;
 public interface TMIService {
 
     //회원가입
-    @Multipart
+    @FormUrlEncoded
     @POST("user/signup/send")
-    Call<ServerRequestBody> signUp(@Part MultipartBody.Part user_img);
+    Call<ServerRequestBody> signUp(@Field("email") String email, @Field("pwd") String pwd,@Field("name") String name);
 
     //로그인
     @FormUrlEncoded
@@ -56,7 +56,7 @@ public interface TMIService {
     @POST("user/mail/send")
     Call<ServerRequestBody> mailSend( @Field("email") String email);
 
-    //방삭제
+    //택시 전체 리스트
     @FormUrlEncoded
     @POST("taxi/taxiList")
     Call<taxiAllListBody> taxiList(@Header("user_token") String user_token);
