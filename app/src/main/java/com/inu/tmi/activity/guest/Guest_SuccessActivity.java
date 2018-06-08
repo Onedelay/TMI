@@ -162,15 +162,15 @@ public class Guest_SuccessActivity extends AppCompatActivity {
                                     userimg1.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.userimg1));
                                     username1.setText(rideMemBody.getMemInfo().get(i).getUser_name());
                                 }
-                                if (i == 1) {
+                                else if (i == 1) {
                                     userimg2.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.userimg2));
                                     username2.setText(rideMemBody.getMemInfo().get(i).getUser_name());
                                 }
-                                if (i == 2) {
+                                else if (i == 2) {
                                     userimg3.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.userimg3));
                                     username3.setText(rideMemBody.getMemInfo().get(i).getUser_name());
                                 }
-                                if (i == 3) {
+                                else {
                                     userimg4.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.userimg4));
                                     username4.setText(rideMemBody.getMemInfo().get(i).getUser_name());
                                 }

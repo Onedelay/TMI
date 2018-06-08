@@ -157,7 +157,7 @@ public class Host_SuccessActivity extends AppCompatActivity {
                         Log.i(TAG, " : server success - ");
                         RideMemBody rideMemBody = response.body();
                         if (rideMemBody.getMsg().equals("success")) {
-                            for (int i = 0; i < rideMemBody.getMemeNum()+1; i++) {
+                            for (int i = 0; i < rideMemBody.getMemInfo().size(); i++) {
                                 if (i == 0) {
                                     userimg1.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.userimg1));
                                     username1.setText(rideMemBody.getMemInfo().get(i).getUser_name());
