@@ -10,10 +10,9 @@
         android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_weight="1"
-        android:background="@drawable/mainProfile"
         android:fitsSystemWindows="false"
         android:padding="25dp"
-        android:scaleType="center" />
+     />
 
     <TextView
         android:id="@+id/username"
