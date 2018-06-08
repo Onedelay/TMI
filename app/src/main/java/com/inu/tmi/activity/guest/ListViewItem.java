@@ -17,15 +17,17 @@ public class ListViewItem {
     private String Dst;
     private String content;
     private String name;
+    private int roomId;
 
     public ListViewItem() {
     }
 
-    public ListViewItem(String name, String from, String to, String content) {
+    public ListViewItem(String name, String from, String to, String content, int roomId) {
         From = from;
         To = to;
         this.content = content;
         this.name = name;
+        this.roomId = roomId;
     }
 
     public void setEnd_long(Double end_long) {
@@ -106,5 +108,13 @@ public class ListViewItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 }
