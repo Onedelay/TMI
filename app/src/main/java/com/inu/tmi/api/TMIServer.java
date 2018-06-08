@@ -52,11 +52,8 @@ public class TMIServer extends Application{
     }
 
 
-    public void signUp(@NonNull String email, @NonNull String pwd, @NonNull String name, @NonNull File user_img, Callback<ServerRequestBody> callback) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/webp"), user_img);
-        MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("userfile", user_img.getName(), requestBody);
-
-        tmiService.signUp(multipartBody).enqueue(callback);
+    public void signUp(@NonNull String email, @NonNull String pwd, @NonNull String name, Callback<ServerRequestBody> callback) {
+        tmiService.signUp(email,pwd,name).enqueue(callback);
 
     }
 

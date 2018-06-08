@@ -15,6 +15,20 @@ public class ListViewItem {
     private Double end_long;
     private Double end_lati;
     private String Dst;
+    private String content;
+    private String name;
+    private int roomId;
+
+    public ListViewItem() {
+    }
+
+    public ListViewItem(String name, String from, String to, String content, int roomId) {
+        From = from;
+        To = to;
+        this.content = content;
+        this.name = name;
+        this.roomId = roomId;
+    }
 
     public void setEnd_long(Double end_long) {
         this.end_long = end_long;
@@ -78,5 +92,29 @@ public class ListViewItem {
 
     public Double getEnd_long() {
         return end_long;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 }

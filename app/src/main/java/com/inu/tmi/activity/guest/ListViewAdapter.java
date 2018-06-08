@@ -28,8 +28,8 @@ public class ListViewAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int i) {
-        return i;
+    public ListViewItem getItem(int i) {
+        return listViewItems.get(i);
     }
 
     @Override
@@ -58,14 +58,14 @@ public class ListViewAdapter extends BaseAdapter{
 
         from.setText(list.getFrom());
         to.setText(list.getTo());
-        distance.setText(list.getDst());
+        distance.setText(list.getDst()+"m");
 
         return view;
     }
 
 
     //이 함수 호출하여 리스트뷰에 추가하기!~~
-    public void addListitem( String From , String To, String Distance)
+    public void addListitem(String From , String To, String Distance)
     {
         ListViewItem item = new ListViewItem();
 

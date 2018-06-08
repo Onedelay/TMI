@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.inu.tmi.R;
 import com.inu.tmi.activity.MainActivity;
 import com.inu.tmi.activity.host.Host_SuccessActivity;
+import com.nhn.android.maps.maplib.NGeoPoint;
 
 /**
  * Created by bmj on 2018-06-05.
@@ -68,8 +69,8 @@ public class Guest_ParticipaintingActivity extends AppCompatActivity {
             }
         });
 
-        BACKbtn = (ImageButton)findViewById(R.id.Back);
-        BACKbtn.setOnClickListener(new View.OnClickListener(){
+        BACKbtn = (ImageButton) findViewById(R.id.Back);
+        BACKbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Guest_ParticipaintingActivity.this, MainActivity.class);
@@ -87,7 +88,6 @@ public class Guest_ParticipaintingActivity extends AppCompatActivity {
                 drawerLayout.closeDrawers();
 
                 int id = item.getItemId();
-                Intent intent;
                 switch (id) {
                     case R.id.user:
                         Toast.makeText(getApplicationContext(), "회원 정보 클릭", Toast.LENGTH_SHORT).show();
@@ -111,7 +111,7 @@ public class Guest_ParticipaintingActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("리스트"));
 
         viewPager = (ViewPager) findViewById(R.id.pager);
-       TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), this);
+        TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 

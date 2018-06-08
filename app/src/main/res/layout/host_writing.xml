@@ -74,10 +74,9 @@
 
                 <ImageButton
                     android:id="@+id/gps"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    app:srcCompat="@color/colorBlack" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_set_poi" />
             </LinearLayout>
 
         </LinearLayout>
@@ -132,6 +131,31 @@
                 android:entries="@array/comment_arrays" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/msg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                 />
+
+            <EditText
+                android:id="@+id/selfMsg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_weight="0.5"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
