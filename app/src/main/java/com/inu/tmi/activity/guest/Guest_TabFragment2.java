@@ -1,11 +1,8 @@
 package com.inu.tmi.activity.guest;
 
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +13,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.inu.tmi.R;
-import com.inu.tmi.activity.LoginActivity;
-import com.inu.tmi.activity.MainActivity;
 import com.inu.tmi.api.GuestListBody;
-import com.inu.tmi.api.LoginBody;
 import com.inu.tmi.api.TMIServer;
 import com.inu.tmi.fragment.ApplyFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,15 +53,13 @@ public class Guest_TabFragment2 extends Fragment {
                 bundle.putString("dest", items.get(i).getTo());
                 bundle.putString("msg", items.get(i).getContent());
                 bundle.putString("name", items.get(i).getName());
+                bundle.putInt("roomId", items.get(i).getRoomId());
                 fragment.setArguments(bundle);
                 fragment.show(getFragmentManager(), "fragment");
             }
         });
 
         //Refresh();
-
-        // listViewAdapter.addListitem(ContextCompat.getDrawable(getContext(),R.drawable.back_arrow),"인천대 ","집가고 싶어요","100"+"M");
-
 
         ImageButton refreshbtn = (ImageButton) view.findViewById(R.id.refresh);
         refreshbtn.setOnClickListener(new View.OnClickListener() {
@@ -82,8 +73,6 @@ public class Guest_TabFragment2 extends Fragment {
     }
 
     public void Refresh() {
-        //예시 추가
-        //listViewAdapter.addListitem(ContextCompat.getDrawable(getContext(),R.drawable.back_arrow),"인천대 헤헷","집가고 싶어요","100"+"M")
         //TODO
         //서버에서 주최자, 출발지 , 목적지, 위도 경도 갖고와서
 
@@ -101,7 +90,7 @@ public class Guest_TabFragment2 extends Fragment {
                                 listViewAdapter.notifyDataSetChanged();
 
                                 setItem(guestListBody.getResult().get(i).getHost_name(), guestListBody.getResult().get(i).getStart_name(),
-                                        guestListBody.getResult().get(i).getLast_name(), guestListBody.getResult().get(i).getTaxi_msg());
+                                        guestListBody.getResult().get(i).getLast_name(), guestListBody.getResult().get(i).getTaxi_msg(), guestListBody.getResult().get(i).getRoom_id());
                             }
 
                         } else {
@@ -118,26 +107,10 @@ public class Guest_TabFragment2 extends Fragment {
             public void onFailure(Call<GuestListBody> call, Throwable t) {
                 Log.i(TAG, " : register fail - " + t.toString());
             }
-            //for(bocy 사이즈 만큼)
-            //
         });
     }
 
-    public double GetDistance(double latitude_a, double longtitude_a, double latitude_b, double longtitude_b) {
-        Location start = new Location("A");
-        Location end = new Location("B");
-
-        start.setLatitude(latitude_a);
-        start.setLongitude(longtitude_a);
-        end.setLatitude(latitude_b);
-        end.setLongitude(longtitude_b);
-
-        double distance = start.distanceTo(end);
-
-        return distance;
-    }
-
-    public void setItem(String str1, String str2, String str3, String str4) {
-        items.add(new ListViewItem(str1, str2, str3, str4));
+    public void setItem(String str1, String str2, String str3, String str4, int roomId) {
+        items.add(new ListViewItem(str1, str2, str3, str4, roomId));
     }
 }
