@@ -246,6 +246,7 @@ public class Host_WritingActivity extends AppCompatActivity {
                                 Log.i(TAG, "응답");
                                 //db 저장 후 Taxi Mate 만들기
                                 SharedPrefManager.preferenceSave(getApplicationContext(),"roomnum",roomBody.getRoom_id());
+                                SharedPrefManager.preferenceSave(getApplicationContext(),"maker",true);
                                 Log.i(TAG,String.valueOf(SharedPrefManager.preferencesLoadInt(getApplicationContext(),"roomnum")));
                                 Intent intent = new Intent(Host_WritingActivity.this, Host_SuccessActivity.class);
                                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);

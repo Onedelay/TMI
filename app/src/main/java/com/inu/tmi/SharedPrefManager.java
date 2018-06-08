@@ -366,6 +366,8 @@ public class SharedPrefManager {
     preferencesRemove(context,"pass");
     preferencesRemove(context,"name");
     preferencesRemove(context,"AutoLogin");
+    preferencesRemove(context,"roomnum");
+    preferencesRemove(context,"maker");
 
   }
   public static final String Location="outside" ;//처음 장소는 밖에

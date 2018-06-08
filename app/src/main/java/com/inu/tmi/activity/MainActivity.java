@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.inu.tmi.R;
 import com.inu.tmi.SharedPrefManager;
 import com.inu.tmi.activity.guest.Guest_ParticipaintingActivity;
+import com.inu.tmi.activity.guest.Guest_SuccessActivity;
+import com.inu.tmi.activity.host.Host_SuccessActivity;
 import com.inu.tmi.activity.host.Host_WritingActivity;
 import com.inu.tmi.handler.BackPressCloseHandler;
 
@@ -95,7 +97,24 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"인증하기 클릭", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.blacklist:
-                        Toast.makeText(getApplicationContext(),"블랙리스트", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"참여중인 방", Toast.LENGTH_SHORT).show();
+                        if(SharedPrefManager.preferencesLoadInt(getApplicationContext(),"roomnum")!= 0)
+                        {
+                            Intent itt;
+                            if(SharedPrefManager.preferencesLoadBoolean(getApplicationContext(),"maker"))
+                            {
+                                itt = new Intent(MainActivity.this, Host_SuccessActivity.class);
+                                startActivity(itt);
+                                finish();
+                            }
+                            else
+                            {
+                                itt = new Intent(MainActivity.this, Guest_SuccessActivity.class);
+                                startActivity(itt);
+                                finish();
+                            }
+
+                        }
                         break;
                     case R.id.logout:
                         Toast.makeText(getApplicationContext(),"로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
@@ -125,18 +144,57 @@ public class MainActivity extends AppCompatActivity {
         Host.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent(MainActivity.this, Host_WritingActivity.class);
-                startActivity(intent);
+                if(SharedPrefManager.preferencesLoadInt(getApplicationContext(),"roomnum")!= -1) {
+                    Toast.makeText(getApplicationContext(),"현재 참여중인 방이 있습니다.", Toast.LENGTH_SHORT).show();
+                    Intent itt;
+                    if(SharedPrefManager.preferencesLoadBoolean(getApplicationContext(),"maker"))
+                    {
+                        itt = new Intent(MainActivity.this, Host_SuccessActivity.class);
+                        startActivity(itt);
+                        finish();
+                    }
+                    else
+                    {
+                        itt = new Intent(MainActivity.this, Guest_SuccessActivity.class);
+                        startActivity(itt);
+                        finish();
+                    }
+                }
+                else
+                {
+                    Intent intent = new Intent(MainActivity.this, Host_WritingActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
+        Log.i("TMI.TMI room",String.valueOf(SharedPrefManager.preferencesLoadInt(getApplicationContext(),"roomnum")));
         //탈래요 눌렀을 때
         Guest = (Button)findViewById(R.id.guest);
         Guest.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent(MainActivity.this, Guest_ParticipaintingActivity.class);
-                startActivity(intent);
+                if(SharedPrefManager.preferencesLoadInt(getApplicationContext(),"roomnum") != -1 ) {
+                    Toast.makeText(getApplicationContext(),"현재 참여중인 방이 있습니다.", Toast.LENGTH_SHORT).show();
+                    Intent itt;
+                    if(SharedPrefManager.preferencesLoadBoolean(getApplicationContext(),"maker"))
+                    {
+                        itt = new Intent(MainActivity.this, Host_SuccessActivity.class);
+                        startActivity(itt);
+                        finish();
+                    }
+                    else
+                    {
+                        itt = new Intent(MainActivity.this, Guest_SuccessActivity.class);
+                        startActivity(itt);
+                        finish();
+                    }
+            }
+            else {
+                    Intent intent = new Intent(MainActivity.this, Guest_ParticipaintingActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }

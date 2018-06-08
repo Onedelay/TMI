@@ -44,6 +44,7 @@
         <activity android:name=".activity.host.Host_MakingActivity" />
         <activity android:name=".activity.host.Host_WritingActivity" />
         <activity android:name=".activity.host.Host_SuccessActivity" />
+        <activity android:name=".activity.guest.Guest_SuccessActivity"/>
     </application>
 
 </manifest>

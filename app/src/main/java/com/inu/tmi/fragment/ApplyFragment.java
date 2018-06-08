@@ -1,6 +1,7 @@
 package com.inu.tmi.fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -13,8 +14,7 @@ import android.widget.Toast;
 
 import com.inu.tmi.R;
 import com.inu.tmi.SharedPrefManager;
-import com.inu.tmi.activity.guest.Guest_TabFragment1;
-import com.inu.tmi.activity.guest.Guest_TabFragment2;
+import com.inu.tmi.activity.guest.Guest_SuccessActivity;
 import com.inu.tmi.api.ServerRequestBody;
 import com.inu.tmi.api.TMIServer;
 
@@ -62,6 +62,10 @@ public class ApplyFragment extends DialogFragment {
                         public void onResponse(Call<ServerRequestBody> call, Response<ServerRequestBody> response) {
                             if (response.body() != null) {
                                 Toast.makeText(getContext(), response.body().getMsg(), Toast.LENGTH_SHORT).show();
+                                SharedPrefManager.preferenceSave(getContext(),"roomnum",getArguments().getInt("roomId"));
+                                Intent it = new Intent(getContext(), Guest_SuccessActivity.class);
+                                getContext().startActivity(it);
+                                //TODO intent 이동
                                 getDialog().dismiss();
                             }
                         }

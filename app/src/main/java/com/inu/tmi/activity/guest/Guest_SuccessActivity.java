@@ -1,4 +1,4 @@
-package com.inu.tmi.activity.host;
+package com.inu.tmi.activity.guest;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,11 +33,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by bmj on 2018-06-05.
+ * Created by bmj on 2018-06-08.
  */
 
-public class Host_SuccessActivity extends AppCompatActivity {
-    private static final String TAG = "TMI.TMI_HOST_Success";
+public class Guest_SuccessActivity extends AppCompatActivity {
+    private static final String TAG = "TMI.TMI_GUEST_Success";
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -68,7 +68,7 @@ public class Host_SuccessActivity extends AppCompatActivity {
         BACKbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Host_SuccessActivity.this, MainActivity.class);
+                Intent intent = new Intent(Guest_SuccessActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }

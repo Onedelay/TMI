@@ -11,7 +11,7 @@
             android:checked="false"/>
         <item
             android:id="@+id/blacklist"
-            android:title="블랙리스트"
+            android:title="참여중인 방"
             android:checked="false"/>
     </group>
 
