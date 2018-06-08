@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,7 +21,9 @@ import com.inu.tmi.activity.MainActivity;
 import com.inu.tmi.api.GuestListBody;
 import com.inu.tmi.api.LoginBody;
 import com.inu.tmi.api.TMIServer;
+import com.inu.tmi.fragment.ApplyFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -32,26 +35,43 @@ import retrofit2.Response;
  */
 
 public class Guest_TabFragment2 extends Fragment {
-
     private static final String TAG = "TMI.TMIGuest";
     static private ListViewAdapter listViewAdapter;
     static private ListView guestlist;
+
+    private ArrayList<ListViewItem> items;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.guest_tabfragment2,container,false);
+        View view = inflater.inflate(R.layout.guest_tabfragment2, container, false);
 
-        guestlist = (ListView)view.findViewById(R.id.guest_listview);
-        guestlist.setAdapter(listViewAdapter = new ListViewAdapter(view.getContext(),R.layout.guest_tabfragment2));
+        items = new ArrayList<>();
+
+        guestlist = (ListView) view.findViewById(R.id.guest_listview);
+        guestlist.setAdapter(listViewAdapter = new ListViewAdapter(view.getContext(), R.layout.guest_tabfragment2));
+        guestlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ApplyFragment fragment = new ApplyFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("depart", items.get(i).getFrom());
+                bundle.putString("dest", items.get(i).getTo());
+                bundle.putString("msg", items.get(i).getContent());
+                bundle.putString("name", items.get(i).getName());
+                fragment.setArguments(bundle);
+                fragment.show(getFragmentManager(), "fragment");
+            }
+        });
 
         //Refresh();
 
-       // listViewAdapter.addListitem(ContextCompat.getDrawable(getContext(),R.drawable.back_arrow),"인천대 ","집가고 싶어요","100"+"M");
+        // listViewAdapter.addListitem(ContextCompat.getDrawable(getContext(),R.drawable.back_arrow),"인천대 ","집가고 싶어요","100"+"M");
 
 
-        ImageButton refreshbtn = (ImageButton)view.findViewById(R.id.refresh);
-        refreshbtn.setOnClickListener(new View.OnClickListener(){
+        ImageButton refreshbtn = (ImageButton) view.findViewById(R.id.refresh);
+        refreshbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Refresh();//
@@ -61,50 +81,49 @@ public class Guest_TabFragment2 extends Fragment {
         return view;
     }
 
-    public void Refresh()
-    {
+    public void Refresh() {
         //예시 추가
         //listViewAdapter.addListitem(ContextCompat.getDrawable(getContext(),R.drawable.back_arrow),"인천대 헤헷","집가고 싶어요","100"+"M")
         //TODO
         //서버에서 주최자, 출발지 , 목적지, 위도 경도 갖고와서
 
-        TMIServer.getInstance().listCall(12.22,12.22, new Callback<GuestListBody>() {
+        TMIServer.getInstance().listCall(12.22, 12.22, new Callback<GuestListBody>() {
             @Override
             public void onResponse(Call<GuestListBody> call, Response<GuestListBody> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     Log.i(TAG, response.body().getMsg());
-                    if(response.body() != null) {
+                    if (response.body() != null) {
                         Log.i(TAG, " : server success - ");
                         GuestListBody guestListBody = response.body();
                         if (guestListBody.getMsg().equals("success")) {
-                            for(int i=0;i<guestListBody.getResult().size();i++)
-                            {
-                                listViewAdapter.addListitem(guestListBody.getResult().get(i).getStart_name(),guestListBody.getResult().get(i).getLast_name(),String.valueOf((int)guestListBody.getResult().get(i).getDistance()));
+                            for (int i = 0; i < guestListBody.getResult().size(); i++) {
+                                listViewAdapter.addListitem(guestListBody.getResult().get(i).getStart_name(), guestListBody.getResult().get(i).getLast_name(), String.valueOf((int) guestListBody.getResult().get(i).getDistance()));
                                 listViewAdapter.notifyDataSetChanged();
+
+                                setItem(guestListBody.getResult().get(i).getHost_name(), guestListBody.getResult().get(i).getStart_name(),
+                                        guestListBody.getResult().get(i).getLast_name(), guestListBody.getResult().get(i).getTaxi_msg());
                             }
 
                         } else {
                             Toast.makeText(getContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
-                else
-                {
+                } else {
                     Log.i(TAG, " : response fail ");
                     //Log.i(TAG,response.body().toString());
                 }
             }
+
             @Override
             public void onFailure(Call<GuestListBody> call, Throwable t) {
                 Log.i(TAG, " : register fail - " + t.toString());
             }
-        //for(bocy 사이즈 만큼)
-        //
+            //for(bocy 사이즈 만큼)
+            //
         });
     }
-    public double GetDistance(double latitude_a , double longtitude_a, double latitude_b, double longtitude_b)
-    {
+
+    public double GetDistance(double latitude_a, double longtitude_a, double latitude_b, double longtitude_b) {
         Location start = new Location("A");
         Location end = new Location("B");
 
@@ -116,5 +135,9 @@ public class Guest_TabFragment2 extends Fragment {
         double distance = start.distanceTo(end);
 
         return distance;
+    }
+
+    public void setItem(String str1, String str2, String str3, String str4) {
+        items.add(new ListViewItem(str1, str2, str3, str4));
     }
 }

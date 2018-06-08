@@ -28,8 +28,8 @@ public class ListViewAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int i) {
-        return i;
+    public ListViewItem getItem(int i) {
+        return listViewItems.get(i);
     }
 
     @Override
