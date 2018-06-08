@@ -1,9 +1,6 @@
 package com.inu.tmi.api;
 
-import java.util.List;
-
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -56,9 +53,14 @@ public interface TMIService {
     @POST("user/mail/send")
     Call<ServerRequestBody> mailSend( @Field("email") String email);
 
-    //방삭제
+  //방삭제
     @FormUrlEncoded
     @POST("taxi/taxiList")
     Call<taxiAllListBody> taxiList(@Header("user_token") String user_token);
+
+    //방삭제
+    @FormUrlEncoded
+    @POST("taxi/taxiDetail")
+    Call<RideMemBody> rideMem(@Header("user_token") String user_token,@Field("room_id") int room_id);
 
 }

@@ -140,8 +140,8 @@ public class Host_WritingActivity extends AppCompatActivity {
             lastlong = intent.getStringExtra("lastlong");
             startname = intent.getStringExtra("startname");
             lastname = intent.getStringExtra("lastname");
-            if( startname == null) startname = "명주바보";
-            if( lastname == null) lastname = "지연바보";
+            if (startname == null) startname = "명주바보";
+            if (lastname == null) lastname = "지연바보";
 
         }
 
@@ -205,14 +205,17 @@ public class Host_WritingActivity extends AppCompatActivity {
                 if (!pregps.getText().equals("") && !spinner.getSelectedItem().toString().equals("")) {
                     //TODO
 
-                    String user_token = SharedPrefManager.preferencesLoadString(getApplicationContext(),"token");
-                    TMIServer.getInstance().createRoom(user_token,startlat,startlong,lastlat,lastlong,commentspinner.getSelectedItem().toString(),startname,spinner.getSelectedItem().toString(), new Callback<RoomBody>() {
+                    String user_token = SharedPrefManager.preferencesLoadString(getApplicationContext(), "token");
+                    TMIServer.getInstance().createRoom(user_token, startlat, startlong, lastlat, lastlong, commentspinner.getSelectedItem().toString(), startname, spinner.getSelectedItem().toString(), new Callback<RoomBody>() {
 
                         @Override
                         public void onResponse(Call<RoomBody> call, Response<RoomBody> response) {
                             if (response.body() != null) {
+                                RoomBody roomBody = response.body();
                                 Log.i(TAG, "응답");
                                 //db 저장 후 Taxi Mate 만들기
+                                SharedPrefManager.preferenceSave(getApplicationContext(),"roomnum",roomBody.getRoom_id());
+                                Log.i(TAG,String.valueOf(SharedPrefManager.preferencesLoadInt(getApplicationContext(),"roomnum")));
                                 Intent intent = new Intent(Host_WritingActivity.this, Host_SuccessActivity.class);
                                 intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
@@ -228,7 +231,6 @@ public class Host_WritingActivity extends AppCompatActivity {
 
                         }
                     });
-
 
 
                 }

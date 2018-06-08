@@ -41,7 +41,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1.6"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <LinearLayout
@@ -57,9 +57,10 @@
                     android:layout_weight="1" />
 
                 <ImageButton
-                    android:id="@+id/refresh"
+                    android:id="@+id/imageButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="1dp"
                     android:layout_weight="2.9"
                     android:background="@drawable/btn_refresh"
                     android:scaleType="fitXY" />
@@ -165,15 +166,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="모 집 완 료" />
-
     </LinearLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
@@ -182,7 +174,5 @@
         android:layout_gravity="end"
         app:headerLayout="@layout/drawer_header"
         app:menu="@menu/drawer" />
-
-
 
 </android.support.v4.widget.DrawerLayout>

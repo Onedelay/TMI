@@ -100,7 +100,11 @@ public class TMIServer extends Application{
     public void taxiList(@NonNull String user_token , Callback<taxiAllListBody> callback) {
        // Log.i(TAG,"TMIServer emailCheck");
         tmiService.taxiList(user_token).enqueue(callback);
+    }
 
+    public void rideMem(@NonNull String user_token,@NonNull int room_id , Callback<RideMemBody> callback) {
+        // Log.i(TAG,"TMIServer emailCheck");
+        tmiService.rideMem(user_token,room_id).enqueue(callback);
     }
 
 }
