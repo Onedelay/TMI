@@ -57,8 +57,6 @@ public class Guest_TabFragment2 extends Fragment {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-        Refresh(lat, lng);
-
         items = new ArrayList<>();
 
         guestlist = (ListView) view.findViewById(R.id.guest_listview);
@@ -115,9 +113,14 @@ public class Guest_TabFragment2 extends Fragment {
         //TODO
         //서버에서 주최자, 출발지 , 목적지, 위도 경도 갖고와서
 
+        if(items.size() > 0){
+            items.clear();
+        }
+
         TMIServer.getInstance().listCall(lat, lng, new Callback<GuestListBody>() {
             @Override
             public void onResponse(Call<GuestListBody> call, Response<GuestListBody> response) {
+                listViewAdapter.removeAllData();
                 if (response.isSuccessful()) {
                     Log.i(TAG, response.body().getMsg());
                     if (response.body() != null) {

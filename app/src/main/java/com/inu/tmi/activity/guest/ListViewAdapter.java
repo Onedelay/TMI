@@ -76,4 +76,10 @@ public class ListViewAdapter extends BaseAdapter{
 
         listViewItems.add(item);
     }
+
+    public void removeAllData(){
+        if(listViewItems.size() > 0){
+            listViewItems.clear();
+        }
+    }
 }

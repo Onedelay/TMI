@@ -83,7 +83,7 @@ public class NMapFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mMapContext = new NMapContext(super.getActivity());
-
+        mMapContext.setMapDataProviderListener(onDataProviderListener);
         mMapContext.onCreate();
     }
 
@@ -112,8 +112,6 @@ public class NMapFragment extends Fragment {
         NMapLocationManager mMapLocationManager = new NMapLocationManager(getContext());
         mMapLocationManager.setOnLocationChangeListener(onMyLocationChangeListener);
         mMapLocationManager.enableMyLocation(true);
-
-        mMapContext.setMapDataProviderListener(onDataProviderListener);
 
         NMapLocationManager initPosition = new NMapLocationManager(getContext());
         initPosition.setOnLocationChangeListener(new NMapLocationManager.OnLocationChangeListener() {
