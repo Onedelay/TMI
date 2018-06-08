@@ -3,6 +3,7 @@ package com.inu.tmi.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.inu.tmi.R;
 import com.inu.tmi.SharedPrefManager;
 import com.inu.tmi.api.LoginBody;
+import com.inu.tmi.api.ServerRequestBody;
 import com.inu.tmi.api.TMIServer;
 
 import retrofit2.Call;
@@ -171,17 +173,35 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.i(TAG, " : signup success - ");
                                     LoginBody loginBody = response.body();
 
-                                    if (loginBody.getMsg().equals("email not validated") || loginBody.getMsg().equals("success")) {
+                                    if(loginBody.getMsg().equals("email not validated") ){
+                                        TMIServer.getInstance().mailSend(ID.getText().toString(), new Callback< ServerRequestBody>(){
+
+                                            @Override
+                                            public void onResponse(Call<ServerRequestBody> call, Response<ServerRequestBody> response) {
+                                                Toast.makeText(getApplicationContext(),"메일 인증을 해주세요",Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.inu.ac.kr"));
+                                                startActivity(intent);
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ServerRequestBody> call, Throwable t) {
+
+                                            }
+                                        });
+
+                                    }
+                                    else if (loginBody.getMsg().equals("success")) {
                                         //자동로그인
                                         if(autoLogin.isChecked()) {
-                                            Log.i("info : ","autoLogin Check");
+
                                             AutoLogin(ID.getText().toString(), PW.getText().toString());
-                                            UserInfoSave(loginBody.getUserInfo().getUser_name(), loginBody.getUserInfo().getEmail(), loginBody.getUserInfo().getUser_img(),loginBody.getUserInfo().getToken());
+                                            UserInfoSave(loginBody.getUserInfo().getUser_name(), loginBody.getUserInfo().getEmail(),loginBody.getUserInfo().getToken());
                                         }
                                         else{
                                             SharedPrefManager.NotAutoLogin(LoginActivity.this);
                                         }
-                                        UserInfoSave(loginBody.getUserInfo().getUser_name(), loginBody.getUserInfo().getEmail(), loginBody.getUserInfo().getUser_img(),loginBody.getUserInfo().getToken());
+                                        Log.i(TAG,loginBody.getUserInfo().getEmail().toString());
+                                        UserInfoSave(loginBody.getUserInfo().getUser_name(), loginBody.getUserInfo().getEmail(), loginBody.getUserInfo().getToken());;
                                         //로그인 성공 시 메인 액티비티로 intent
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -254,14 +274,12 @@ public class LoginActivity extends AppCompatActivity {
         Log.i("info : ","AutoLogin " + result);
     }
 
-    public void UserInfoSave(String name, String email, String image, String token)
+    public void UserInfoSave(String name, String email, String token)
     {
         boolean result;
         result = SharedPrefManager.preferenceSave(this,"name",name);
         Log.i("info : ","AutoLogin " + result);
         result = SharedPrefManager.preferenceSave(this,"email",email);
-        Log.i("info : ","AutoLogin " + result);
-        result = SharedPrefManager.preferenceSave(this,"image",image);
         Log.i("info : ","AutoLogin " + result);
         result = SharedPrefManager.preferenceSave(this,"token",token);
         Log.i("info : ","AutoLogin " + result);
