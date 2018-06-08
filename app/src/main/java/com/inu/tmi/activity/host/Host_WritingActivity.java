@@ -1,5 +1,6 @@
 package com.inu.tmi.activity.host;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,6 +47,7 @@ public class Host_WritingActivity extends AppCompatActivity {
     private String lastlong;
     private String startname;
     private String lastname;
+    private String msg;
 
     private Toolbar toolbar;
     TextView toolbar_title;
@@ -54,12 +57,14 @@ public class Host_WritingActivity extends AppCompatActivity {
     TextView dstgps; //목적지
     Button WtoS;
     ImageButton BACKbtn;
+    EditText editText;
 
     Spinner spinner;
     Spinner commentspinner;
     ImageButton GPS;
     String DST = "";
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +77,9 @@ public class Host_WritingActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(null);
         toolbar_title = (TextView) findViewById(R.id.toolbar_title);
         toolbar_title.setText(R.string.app_name);  //TMI
+
+        editText = (EditText)findViewById(R.id.selfMsg);
+        editText.setVisibility(0);
 
         //세줄 버튼 눌렀을 때
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -168,9 +176,26 @@ public class Host_WritingActivity extends AppCompatActivity {
         splinner_adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         commentspinner.setAdapter(splinner_adapter1);
         commentspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("WrongConstant")
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                if(commentspinner.getSelectedItem().toString().equals("지각입니다 ㅠ.ㅜ")){
+                    editText.setText("지각입니다 ㅠ.ㅜ");
+                    editText.setVisibility(View.INVISIBLE);
+                }
+                else if(commentspinner.getSelectedItem().toString().equals("저랑 같이 탑승하실래요?")){
+                    editText.setText("저랑 같이 탑승하실래요?");
+                    editText.setVisibility(View.INVISIBLE);
+                }
+                else if(commentspinner.getSelectedItem().toString().equals("자네도 혹시 지각인가?")){
+                    editText.setText("지각입니다 ㅠ.ㅜ저랑 같이 탑승하실래요?자네도 혹시 지각인가?");
+                    editText.setVisibility(View.INVISIBLE);
+                }
+                else if(commentspinner.getSelectedItem().toString().equals("직접 입력")){
+                    editText.setVisibility(View.VISIBLE);
+                    editText.setText("");
+                    //editText.setText("지각입니다 ㅠ.ㅜ저랑 같이 탑승하실래요?자네도 혹시 지각인가?");
+                }
             }
 
             @Override
@@ -206,7 +231,10 @@ public class Host_WritingActivity extends AppCompatActivity {
                     //TODO
 
                     String user_token = SharedPrefManager.preferencesLoadString(getApplicationContext(),"token");
-                    TMIServer.getInstance().createRoom(user_token,startlat,startlong,lastlat,lastlong,commentspinner.getSelectedItem().toString(),startname,spinner.getSelectedItem().toString(), new Callback<RoomBody>() {
+
+                    if(editText.getText().toString() != null)  msg = editText.getText().toString();
+                    else msg = commentspinner.getSelectedItem().toString();
+                    TMIServer.getInstance().createRoom(user_token,startlat,startlong,lastlat,lastlong,msg,startname,spinner.getSelectedItem().toString(), new Callback<RoomBody>() {
 
                         @Override
                         public void onResponse(Call<RoomBody> call, Response<RoomBody> response) {
