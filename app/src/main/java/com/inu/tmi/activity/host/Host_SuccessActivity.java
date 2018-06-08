@@ -1,5 +1,6 @@
 package com.inu.tmi.activity.host;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -136,6 +138,21 @@ public class Host_SuccessActivity extends AppCompatActivity {
         username3 = (TextView) findViewById(R.id.user3);
         username4 = (TextView) findViewById(R.id.user4);
 
+        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(Host_SuccessActivity.this);
+                alert.setPositiveButton("택시호출하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                alert.setMessage("알림");
+                alert.show();
+
+            }
+        });
         Refresh();
 
         findViewById(R.id.refresh).setOnClickListener(new View.OnClickListener() {
