@@ -7,8 +7,7 @@ public class GuestListBody {
     String msg;  //성공 여부
     List<result> result;
 
-    public class result
-    {
+    public class result {
         int room_id;
         String host_name;
         double start_lat;
@@ -18,6 +17,7 @@ public class GuestListBody {
         String start_name;
         String last_name;
         double distance;
+        String taxi_msg;
 
         public int getRoom_id() {
             return room_id;
@@ -89,6 +89,10 @@ public class GuestListBody {
 
         public void setDistance(double distance) {
             this.distance = distance;
+        }
+
+        public String getTaxi_msg() {
+            return taxi_msg;
         }
     }
 
