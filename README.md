@@ -1,11 +1,63 @@
-# INU UCF HACKATON - TMI(Taxi Mate INU)
+# ![](/images/tmi_icon.png) INU UCF HACKATON - TMI(Taxi Mate INU)
 
-- Function
-  - Sign up for school email verification
-  - Set a departure destination by current location and direct assignment
-  - select the desired destination, the matching is completed
-  
-- Collaborators
+<br>
+
+## # 프로젝트 개요
+
+교통의 불모지인 인천대는 택시가 자주 보입니다. 주변에 택시를 많이 타고 다니는 친구들의 말을 들어보면 택시요금이 부담된다는 얘기를 많이 합니다. 실제로 정각에 학교로 향하는 택시가 많은데, 내리는 승객은 한 명 뿐입니다. 이렇게 목적지가 같은 사람들이 모여 택시를 함께 타면 택시 요금에 대한 부담을 줄이고, 환경 오염도 줄일 수 있습니다. 그래서 기획한 것이 바로 인천대인을 위한 TMI(Taxi Mate INU) 입니다. 
+
+<br>
+
+## # 프로젝트 소개
+
+- 개발기간 : 2018.06.07~2018.06.08
+
+- 팀원 : 5명
   - Android app : 권승미, 배명주, 원지연
   - Design : 박소현
   - Server(Node.js) : 홍지윤
+- 역할 : Android app 개발 - 네이버 지도 API 연동 및 기타 기능
+- 개발언어
+  - 클라이언트 : Android(Java), 
+  - 서버 : Node.js
+- Git : https://github.com/Onedelay/TMI
+- INU UCF Hackathon 2018 Hardcore Track 장려상 수상
+
+<br>
+
+## # 주요 기능
+
+<br>
+
+### 0. 로그인 및 메인화면
+
+![](/images/main.png)
+
+- 학교 이메일 인증을 통한 회원 가입을 할 수 있습니다.
+
+- 로그인 후에 탈사람, 탈래요 버튼을 선택하여 원하는 기능을 이용할 수 있습니다.
+
+<br>
+
+### 1. 탈사람
+
+![](/images/fun1.png)
+
+- 원하는 목적지에 함께 갈 사람을 구할 수 있습니다.
+  - 자신의 현재 위치를 GPS로 가져오고, 원하는 목적지와 간단한 코멘트를 작성하여 택시를 함께 탈 인원을 모집합니다.
+  - 모집하기 버튼을 누르면 택시 메이트를 구하는 새로운 방이 생성됩니다.
+
+<br>
+
+### 2. 탈래요
+
+![](/images/fun2.png)
+
+- 원하는 목적지까지 함께할 사람을 구하는 방에 참여할 수 있습니다.
+  - 리스트에서 현재 개설된 방을 볼 수 있으며, 현재 위치에서 출발 위치의 거리를 계산하여 가까운 순서대로 보여줍니다.
+  - 원하는 출발지와 목적지를 가진 방을 선택하면 탑승 신청을 할 수 있습니다.
+  - 탑승 신청을 누르면 개설되어있는 방에 멤버로 추가됩니다.
+
+
+
+![](/images/we.jpg)
